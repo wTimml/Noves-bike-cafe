@@ -2,6 +2,8 @@ import React from 'react'
 import ButtonOneColumn from '../components/buttonOneColumn'
 import { View, ScrollView, StyleSheet, TextInput, Image,Text } from 'react-native'
 
+import { SocialIcon } from 'react-native-elements'
+
 import Colors from '../constants/colors'
 import ButtonMain from '../components/buttonMain'
 
@@ -20,16 +22,26 @@ export default function SignUpScreen (){
                 <TextInput style={styles.inputComponent} placeholder="senha"/>
             </View>
             <View style={styles.inputView}>
-                <Text>Esqueceu sua senha?</Text>
+                <Text style={styles.textLink}>Esqueceu sua senha?</Text>
                 <ButtonMain style={{margin:10}}>Entrar</ButtonMain>
                 <View style={{flex:1,flexDirection:'row', marginBottom:20}}>
-                    <Text style={{marginRight:10}}>Não possui conta?</Text>
+                    <Text style={styles.textLink}>Não possui conta?</Text>
                     <Text style={{color:Colors.lightColor}}>Cadastrar</Text>
                 </View>    
             </View>
             <View style={styles.inputView} >
-                <ButtonOneColumn>Google</ButtonOneColumn>
-                <ButtonOneColumn>Facebook</ButtonOneColumn>
+                <SocialIcon
+                    title='Entrar Com Google'
+                    button
+                    type='google'
+                    style={{width:250}}
+                />
+                <SocialIcon
+                    title='Entrar Com Facebook'
+                    button
+                    type='facebook'
+                    style={{width:250}}
+                />
             </View>
         </ScrollView>
     )
@@ -58,4 +70,9 @@ const styles = StyleSheet.create({
         width:'100%',
         height:'100%',
     },
+    textLink:{
+        color:'#CBB693',
+        marginRight:10,
+        marginLeft:10
+    }
 })

@@ -2,6 +2,8 @@ import React from 'react'
 import { View, Text, StyleSheet, Button } from 'react-native'
 
 import SignUpScreen from '../screens/signUpScreen'
+import SignInScreen from '../screens/signInScreen'
+
 
 import {AuthContext} from '../context'
 
@@ -81,7 +83,7 @@ export const Splash = () => (
     </ScreenContainer>
 )
 
-export const SignIn = ({ navigation }) => {
+export const SignInTeste = ({ navigation }) => {
     const { signIn } = React.useContext(AuthContext);
 
     return(
@@ -99,6 +101,13 @@ export const CreateAccount=() => {
     const {signUp} = React.useContext(AuthContext)
     return( 
         <SignUpScreen/>
+       )
+}
+
+export const SignIn =() => {
+    const {signIn} = React.useContext(AuthContext)
+    return( 
+        <SignInScreen/>
        )
 }
 

@@ -7,14 +7,14 @@ import {createDrawerNavigator} from '@react-navigation/drawer'
 import {authContext, AuthContext} from '../context'
 import Colors from '../constants/colors'
 
-import {SignIn , CreateAccount, Home, Search, Details, Search2, Profile, Splash } from './navigationScreens'
+import {SignInTeste , CreateAccount,SignIn, Home, Search, Details, Search2, Profile, Splash } from './navigationScreens'
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () => (
   <AuthStack.Navigator>
         
-    <AuthStack.Screen name = 'SignIn' component={SignIn} options={{ title: 'Sign In',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
-    <AuthStack.Screen name = 'CreateAccount' component={CreateAccount} options={{ title: 'Cadastrar',headerTintColor:Colors.primaryColorDark, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
+    <AuthStack.Screen name = 'SignIn' component={SignIn} options={{ title: 'Noves Bike',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
+    <AuthStack.Screen name = 'Entrar' component={SignIn} options={{title:'Entrar', headerTintColor:Colors.primaryColorDark, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
 
   </AuthStack.Navigator>
 )
