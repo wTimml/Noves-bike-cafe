@@ -7,7 +7,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer'
 import {authContext, AuthContext} from '../context'
 import Colors from '../constants/colors'
 
-import {SignInTeste , CreateAccount,SignIn, Home, Search, Details, Search2, Profile, Splash } from './navigationScreens'
+import {SignInTeste , CreateAccount,SignIn, Home, Search, Details, Search2, Profile, Splash,MapScreens } from './navigationScreens'
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () => (
@@ -31,8 +31,11 @@ const HomeStackScreen = () => (
 )
 const SearchStackScreen = () => (
   <SearchStack.Navigator>
-    <SearchStack.Screen name="Search" component={Search} options={{ title: 'Sign In',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
-    <SearchStack.Screen name="Search2" component={Search2} options={{ title: 'Sign In',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
+    {//<SearchStack.Screen name="Search" component={Search} options={{ title: 'Sign In',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
+   // <SearchStack.Screen name="Search2" component={Search2} options={{ title: 'Sign In',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
+   } 
+   <SearchStack.Screen name="MapScreen" component={MapScreens} options={{ title: 'Circuito',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
+   
   </SearchStack.Navigator>
 )
 
@@ -45,10 +48,8 @@ const ProfileStackScreen= () => (
 
 const TabsScreen =() => (
   <Tabs.Navigator>
-    <Tabs.Screen name ="Home" component={HomeStackScreen}/>
-    <Tabs.Screen name ="Explorar" component={SearchStackScreen}/>
+    <Tabs.Screen name ="Histórico" component={HomeStackScreen}/>
     <Tabs.Screen name ="Iniciar" component={SearchStackScreen}/>
-    <Tabs.Screen name ="Perfil" component={SearchStackScreen}/>
     <Tabs.Screen name ="Treino" component={SearchStackScreen}/>
   </Tabs.Navigator>
 )

@@ -17,18 +17,18 @@ const MainButton = props => {
 const styles = StyleSheet.create({  
     button:{
         backgroundColor:Colors.primaryColor,
-        height:40,
-        width:300,
+        height:50,
+        width:250,
         borderRadius:25,
         marginBottom:12
         
     },
     buttonText:{
-        color:'black',
+        color:'white',
         //fontFamily:'open-sans',
         fontSize:18,
         textAlign:'center',
-        marginTop:8
+        padding:10
     }
 })
 

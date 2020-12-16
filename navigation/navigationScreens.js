@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Button } from 'react-native'
 
 import SignUpScreen from '../screens/signUpScreen'
 import SignInScreen from '../screens/signInScreen'
+import MapScreen from '../screens/mapScreen'
 
 
 import {AuthContext} from '../context'
@@ -43,6 +44,12 @@ export const Details = ({ route }) => (
         {route.params.name && <Text> {route.params.name} </Text>}
     </ScreenContainer>
 )
+
+export const MapScreens = ({navigation})=>(
+    <ScreenContainer>
+        <MapScreen/>
+    </ScreenContainer>
+) 
 
 export const Search = ({ navigation }) => (
     <ScreenContainer>
@@ -107,7 +114,7 @@ export const CreateAccount=() => {
 export const SignIn =() => {
     const {signIn} = React.useContext(AuthContext)
     return( 
-        <SignInScreen/>
+        <SignInScreen signin={()=> signIn()}/>
        )
 }
 

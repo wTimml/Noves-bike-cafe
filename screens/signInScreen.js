@@ -1,35 +1,66 @@
-import React from 'react'
-import ButtonOneColumn from '../components/buttonOneColumn'
-import { View, ScrollView, StyleSheet, TextInput, Image,Text } from 'react-native'
+import React, { useState } from 'react'
+import { View, ScrollView, StyleSheet, TextInput, Image,Text,TouchableOpacity } from 'react-native'
 
+
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import { SocialIcon } from 'react-native-elements'
 
 import Colors from '../constants/colors'
 import ButtonMain from '../components/buttonMain'
 
+import SignInScreenEmail from './signInScreenEmail'
+import MainButton from '../components/buttonOneColumn'
 
-export default function SignInScreen (){
+Icon.loadFont();
+
+export default function SignInScreen (props){
+
+    const [byEmail,setByEmail] = useState(false)
+
+    const handleChange = () => {
+        setByEmail(
+            false
+        )
+    }
     return(
         <ScrollView style={styles.container}>
             <View style={styles.inputView}>
                 <Image source={{uri: 'https://scontent.fbfh3-2.fna.fbcdn.net/v/t1.0-9/68878112_2370529246494639_1536561138970394624_n.png?_nc_cat=103&_nc_sid=09cbfe&_nc_eui2=AeEgrll6zefH68fEb0MiJLArQ1JEYUSYGcRDUkRhRJgZxFP2KCGikb4SJFbyV9nCr8JjsdOfL9W08mmZUiGQxGHb&_nc_ohc=Dg-Ok0DZRVgAX-2jKym&_nc_ht=scontent.fbfh3-2.fna&oh=3fe5757b35e4de95fa5b07aa94875a57&oe=5FAFEF38'}}
         style={{width: 300, height: 300}} />
-                <Image source={{uri: 'https://imgur.com/bsZ9uQu.png'}} style={{width: 180, height: 70, marginTop:-35, marginBottom:15}} />
+                <Image source={{uri: 'https://imgur.com/bsZ9uQu.png'}} style={{width: 160, height: 60, marginTop:-35, marginBottom:55}} />
             </View>
 
-            <View style={styles.inputView}>
-                <TextInput style={styles.inputComponent} placeholder="usuario"/>
-                <TextInput style={styles.inputComponent} placeholder="senha"/>
-            </View>
-            <View style={styles.inputView}>
-                <Text style={styles.textLink}>Esqueceu sua senha?</Text>
-                <ButtonMain style={{margin:10}}>Entrar</ButtonMain>
-                <View style={{flex:1,flexDirection:'row', marginBottom:20}}>
-                    <Text style={styles.textLink}>Não possui conta?</Text>
-                    <Text style={{color:Colors.lightColor}}>Cadastrar</Text>
-                </View>    
-            </View>
-            <View style={styles.inputView} >
+            <View>
+{
+            byEmail
+            ?
+            <SignInScreenEmail isByEmail={handleChange}/>
+            :
+
+            <View style={styles.inputView}  >
+
+                <TouchableOpacity onPress={() => setByEmail(true)} activeOpacity={0.6} style={{
+                    backgroundColor:Colors.primaryColor,
+                    height:50,
+                    width:250,
+                    borderRadius:25,
+                    marginBottom:12,
+                        flex: 1,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: 10,
+                        flexDirection:'row',
+                }}> 
+                    <Icon name="email" size={30} color="#FFF"/>
+                    <Text style={{
+                        color:'white',
+                        //fontFamily:'open-sans',
+                        fontSize:16,
+                        marginLeft:10
+                    }}
+                    >Entrar Com Email</Text>
+                </TouchableOpacity>
+
                 <SocialIcon
                     title='Entrar Com Google'
                     button
@@ -41,7 +72,10 @@ export default function SignInScreen (){
                     button
                     type='facebook'
                     style={{width:250}}
+                    onPress={() => props.signin()}
                 />
+            </View>
+}
             </View>
         </ScrollView>
     )
