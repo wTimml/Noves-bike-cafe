@@ -7,6 +7,9 @@ import {createDrawerNavigator} from '@react-navigation/drawer'
 import {authContext, AuthContext} from '../context'
 import Colors from '../constants/colors'
 
+import {AppLoading} from 'expo'
+import * as Font  from 'expo-font';
+
 import {SignInTeste , CreateAccount,SignIn, Home, Search, Details, Search2, Profile, Splash,MapScreens } from './navigationScreens'
 
 const AuthStack = createStackNavigator();
@@ -42,7 +45,8 @@ const SearchStackScreen = () => (
 const ProfileStack = createStackNavigator();
 const ProfileStackScreen= () => (
   <ProfileStack.Navigator>
-    <ProfileStack.Screen name="Profile" component={Profile} options={{ title: 'Sign In',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
+    {//<ProfileStack.Screen name="Profile" component={Profile} options={{ title: 'Sign In',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
+    }
   </ProfileStack.Navigator>
 )
 
@@ -50,7 +54,7 @@ const TabsScreen =() => (
   <Tabs.Navigator>
     <Tabs.Screen name ="Histórico" component={HomeStackScreen}/>
     <Tabs.Screen name ="Iniciar" component={SearchStackScreen}/>
-    <Tabs.Screen name ="Treino" component={SearchStackScreen}/>
+    <Tabs.Screen name ="Treino" component={ProfileStackScreen}/>
   </Tabs.Navigator>
 )
 const Drawer = createDrawerNavigator();
@@ -74,6 +78,14 @@ const RootStackScreen = ({ userToken }) =>(
     </RootStack.Navigator>
 
 )
+const fetchFonts = () => {
+  return  Font.loadAsync({
+     'open-sans':require('../assets/fonts/OpenSans-Regular.ttf'),
+     'open-sans-bold':require('../assets/fonts/OpenSans-Bold.ttf'),
+     'PlutoMedium':require('../assets/fonts/PlutoMedium.otf'),
+     'PlutoMediumItalic':require('../assets/fonts/PlutoMedium-Italic.otf')
+   })
+ }
 
 export default () =>{
   const [isLoading, setIsLoading] = React.useState(true)
@@ -97,11 +109,11 @@ export default () =>{
   }, [])
 
   /*----------------seta um tempo na tela de loading (confere se user está logado)---------------------------*/
-  React.useEffect(() => {
-    setTimeout(()=> {
-      setIsLoading(false);
-    }, 1000)
-  }, [])
+  if(isLoading){
+    return (
+        <AppLoading startAsync={fetchFonts} onFinish={() => setIsLoading(false)}/>
+    )
+  }
   if (isLoading){
     return <Splash/>
   }
