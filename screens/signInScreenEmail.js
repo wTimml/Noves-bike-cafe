@@ -6,7 +6,8 @@ import ButtonMain from '../components/buttonMain'
 import Colors from '../constants/colors'
 
 
-const SignInScreenEmail =props =>{
+const SignInScreenEmail =({navigation},props) =>{
+
     return(
         <View >
             <View style={styles.inputView}>
@@ -18,7 +19,7 @@ const SignInScreenEmail =props =>{
                 <ButtonMain style={{margin:10}}>Entrar</ButtonMain>
                 <View style={{flex:1,flexDirection:'row', marginBottom:20}}>
                     <Text style={styles.textLink}>Não possui conta?</Text>
-                    <Text style={{color:Colors.lightColor}}>Cadastrar</Text>
+                    <Text  onPress={() => navigation.push("CreateAccount")} style={{color:Colors.lightColor}} >Cadastrar</Text>
                 </View>    
 
             </View>

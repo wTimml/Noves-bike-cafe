@@ -35,7 +35,7 @@ const MapHeight = height*0.87
 const ASPECT_RATIO = width / height
 
 const LATITUDE_DELTA = 0.010;
-const LONGITUDE_DELTA = 0.10;
+const LONGITUDE_DELTA = 0.02;
 const LATITUDE = -25.540794;
 const LONGITUDE = -54.5832818
 
@@ -56,6 +56,10 @@ export default class MapScreen extends React.Component{
             distanceTravelled: 0,
             prevLatLng: {},
             mapHeight:MapHeight,
+            speed:0,
+            altitude_:0,
+            altitude_Aux:0,
+            altimetria:0,
             coordinate: new AnimatedRegion({
                 latitude: LATITUDE,
                 longitude: LONGITUDE,
@@ -63,7 +67,8 @@ export default class MapScreen extends React.Component{
                 longitudeDelta:0
             }),
             
-            circuitOn : false
+            circuitOn : false,
+            marginBottom:1
         }
     }
 
@@ -109,8 +114,6 @@ export default class MapScreen extends React.Component{
     }
 
     handleMapHeight = () => {
-        console.log("mapheight"+this.state.mapHeight)
-
         if(this.state.mapHeight===MapHeight){
             this.setState({
                 mapHeight:MapHeight*0.1
@@ -127,6 +130,35 @@ export default class MapScreen extends React.Component{
         return haversine(prevLatLng, newLatLng) || 0;
     }
 
+    calcAltimetria = () => {
+        const { altitude_, altitude_Aux } = this.state;
+        
+        let altimetrias = 0
+
+        if(altitude_Aux === 0 ){
+      //      console.log("altitude_aux 0")
+            this.setState({
+                altitude_Aux : altitude_
+            })
+        }
+        else if(altitude_ > altitude_Aux){
+           
+            altimetrias =  altitude_ - altitude_Aux
+
+   //         console.log("altitude_ >" + altimetrias)
+            this.setState({
+                altitude_Aux:altitude_
+            })
+           
+        }else if(altitude_Aux > altitude_){
+            this.setState({
+                altitude_Aux : altitude_
+            })
+       //     console.log("altitude_aux >")
+        }
+        return(altimetrias) 
+    }
+
 
    taskManager = () =>{
         TaskManager.defineTask(LocationTaskName, ({data, error}) => {
@@ -136,13 +168,11 @@ export default class MapScreen extends React.Component{
             }
             if(data){
                 const {locations} = data;
-                console.log("locations ", locations)
-                console.log(locations[0].coords.latitude)
-
                 
-
-                const { coordinate, routeCoordinates, distanceTravelled } = this.state;
+                const { coordinate, routeCoordinates, distanceTravelled, altimetria } = this.state;
                 const { latitude, longitude } = locations[0].coords
+                const { altitude} = locations[0].coords
+
             
                 const newCoordinate = {
                     latitude,
@@ -159,16 +189,25 @@ export default class MapScreen extends React.Component{
                         longitude,
                         routeCoordinates: routeCoordinates.concat([newCoordinate]),
                         distanceTravelled: distanceTravelled + this.calcDistance(newCoordinate),
-                        prevLatLng: newCoordinate
+                        speed: locations[0].coords.speed,
+                        prevLatLng: newCoordinate,
+                        altitude_: altitude,
+                        altimetria:  altimetria  + this.calcAltimetria()
                     });
                 }
-          
             }
 
     
         })
     }
-   
+    _onMapReady = () => {
+        if(this.state.marginBottom===1){
+            this.setState({marginBottom: 0})
+        }else{
+            this.setState({marginBottom:1})
+        }
+    }
+
     render(){
         this.taskManager()
         
@@ -178,14 +217,18 @@ export default class MapScreen extends React.Component{
                 <View style={{height:this.state.mapHeight, width:width}}>
                    {
                    this.state.mapHeight===MapHeight ?
-                    <MapView    style={[styles.map]}
+                    <MapView    style={{...styles.map, marginBottom:this.state.marginBottom}}
                                 provider={PROVIDER_GOOGLE}   
-                                showsUserLocation
-                                followsUserLocation
-                                loadingEnabled
-                                region={this.getMapRegion()}>
+                                showsUserLocation = {true}
+                                followsUserLocation = {true}
+                                loadingEnabled = {false}
+                                region={this.getMapRegion()}
+                                showsMyLocationButton={true}
+                                onMapReady={this._onMapReady}
+                                >
 
-                            <Polyline coordinates={this.state.routeCoordinates} strokeWidth={3} strokeColor={Colors.primaryColor}/>
+                            <Polyline coordinates={this.state.routeCoordinates} strokeWidth={3} strokeColor={Colors.primaryColor}
+                             lineCap={'square'}  />
                             {/*<Marker.Animated ref={marker=>{
                                 this.marker = marker
                             }} 
@@ -226,7 +269,9 @@ export default class MapScreen extends React.Component{
                 {/*cronometro*/}
                 <View style={{flex:1}}>
                     <ScrollView>
-                        <StartComponent  resetCircuit={this.resetCircuit} handleCircuit={this.handleCircuit} handleTimer={this.handleTimer} distanceTravelled={this.state.distanceTravelled}/>
+                        <StartComponent  resetCircuit={this.resetCircuit} handleCircuit={this.handleCircuit}  distanceTravelled={this.state.distanceTravelled} 
+                            altimetria={this.state.altimetria} speed={this.state.speed} 
+                        />
                     </ScrollView>
                 </View>
             </View>
@@ -245,7 +290,8 @@ const styles = StyleSheet.create({
         alignItems:"center",
     },
     map:{
-        ...StyleSheet.absoluteFillObject
+        ...StyleSheet.absoluteFillObject,
+        flex:1
     },
     bubble:{
         backgroundColor: "rgba(255,255,255,0.7)",

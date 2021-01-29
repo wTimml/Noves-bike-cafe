@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import { SocialIcon } from 'react-native-elements'
 
 import Colors from '../constants/colors'
-import ButtonMain from '../components/buttonMain'
+import Fonts from '../constants/fonts'
 
 import SignInScreenEmail from './signInScreenEmail'
 import MainButton from '../components/buttonOneColumn'
@@ -34,7 +34,7 @@ export default function SignInScreen (props){
 {
             byEmail
             ?
-            <SignInScreenEmail isByEmail={handleChange}/>
+            <SignInScreenEmail isByEmail={handleChange} navigation={props.navigation}/>
             :
 
             <View style={styles.inputView}  >
@@ -54,7 +54,7 @@ export default function SignInScreen (props){
                     <Icon name="email" size={30} color="#FFF"/>
                     <Text style={{
                         color:'white',
-                        //fontFamily:'open-sans',
+                        //fontFamily:Fonts.fontRegular,
                         fontSize:16,
                         marginLeft:10
                     }}

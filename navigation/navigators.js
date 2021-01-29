@@ -1,4 +1,5 @@
 import React from 'react';
+import {View,Platform} from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -6,25 +7,29 @@ import {createDrawerNavigator} from '@react-navigation/drawer'
 
 import {authContext, AuthContext} from '../context'
 import Colors from '../constants/colors'
+import Icons from 'react-native-vector-icons/Ionicons'
+
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 import {AppLoading} from 'expo'
 import * as Font  from 'expo-font';
 
-import {SignInTeste , CreateAccount,SignIn, Home, Search, Details, Search2, Profile, Splash,MapScreens } from './navigationScreens'
+import {SignInTeste , CreateAccount,SignIn, Home, Search, Details, RecordList, RecordDetail, Profile, Splash,MapScreens } from './navigationScreens'
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () => (
   <AuthStack.Navigator>
         
     <AuthStack.Screen name = 'SignIn' component={SignIn} options={{ title: 'Noves Bike',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
-    <AuthStack.Screen name = 'Entrar' component={SignIn} options={{title:'Entrar', headerTintColor:Colors.primaryColorDark, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
+    <AuthStack.Screen name = 'CreateAccount' component={CreateAccount} options={({ route }) => ({title:'Cadastrar', headerTintColor:Colors.primaryColorDark, headerStyle:{backgroundColor:Colors.primaryColor}})}/>
 
   </AuthStack.Navigator>
 )
 
 const Tabs = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
-const SearchStack = createStackNavigator();
+const TrackStack = createStackNavigator();
 
 const HomeStackScreen = () => (
   <HomeStack.Navigator>
@@ -32,29 +37,68 @@ const HomeStackScreen = () => (
     <HomeStack.Screen name="Details" component={Details} options={({ route }) => ({title: route.params.name, headerTintColor:Colors.primaryColorDark, headerStyle:{backgroundColor:Colors.primaryColor}})} />
   </HomeStack.Navigator>
 )
-const SearchStackScreen = () => (
-  <SearchStack.Navigator>
+const TrackStackScreen = () => (
+  <TrackStack.Navigator>
     {//<SearchStack.Screen name="Search" component={Search} options={{ title: 'Sign In',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
    // <SearchStack.Screen name="Search2" component={Search2} options={{ title: 'Sign In',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
    } 
-   <SearchStack.Screen name="MapScreen" component={MapScreens} options={{ title: 'Circuito',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
+   <TrackStack.Screen name="MapScreen" component={MapScreens} options={{ title: 'Circuito',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
    
-  </SearchStack.Navigator>
+  </TrackStack.Navigator>
 )
 
 const ProfileStack = createStackNavigator();
 const ProfileStackScreen= () => (
   <ProfileStack.Navigator>
-    {//<ProfileStack.Screen name="Profile" component={Profile} options={{ title: 'Sign In',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
-    }
+    
+      <ProfileStack.Screen name="Profile" component={Profile} options={{ 
+        title: 'Perfil',
+        headerTintColor:Colors.primaryColorDark,
+        headerTitleAlign:{alignSelf:'center'},
+        headerStyle:{backgroundColor:Colors.primaryColor},
+        headerRight:()=> (
+          <View style={{padding:10}}>
+              <Icons onPress={() => alert('teste')} name={Platform.OS === "ios" ? "ios-settings" : "md-settings"} size={35}/>
+          </View>
+        )
+      }}/>
+
+      <ProfileStack.Screen name="RecordList" component={RecordList} options={{
+        title:'Registro De Atividades',
+        headerTintColor:Colors.primaryColorDark,
+        headerTitleAlign:{alignSelf:'center'},
+        headerStyle:{backgroundColor:Colors.primaryColor},
+      }}/>
+
+      <ProfileStack.Screen name="RecordDetail" component={RecordDetail} options={{
+        title:'Registro De Atividades',
+        headerTintColor:Colors.primaryColorDark,
+        headerTitleAlign:{alignSelf:'center'},
+        headerStyle:{backgroundColor:Colors.primaryColor},
+      }}/>
+    
   </ProfileStack.Navigator>
 )
 
 const TabsScreen =() => (
   <Tabs.Navigator>
-    <Tabs.Screen name ="Histórico" component={HomeStackScreen}/>
-    <Tabs.Screen name ="Iniciar" component={SearchStackScreen}/>
-    <Tabs.Screen name ="Treino" component={ProfileStackScreen}/>
+    <Tabs.Screen name ="Perfil" component={ProfileStackScreen} options={{
+                    tabBarLabel: 'Perfil',
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons name="account" color={color} size={size} />
+                    ),
+                    tabBarBadge: 1,}}/>
+    <Tabs.Screen name ="Iniciar" component={TrackStackScreen} options={{
+                    tabBarLabel: 'Iniciar',
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons name="bike" color={color} size={size} />
+                    )}}/>
+    <Tabs.Screen name ="Treino" component={ProfileStackScreen} options={{
+                    tabBarLabel: 'Treino',
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons name="clipboard-text-outline" color={color} size={size} />
+                    ),
+                    tabBarBadge: 3,}}/>
   </Tabs.Navigator>
 )
 const Drawer = createDrawerNavigator();

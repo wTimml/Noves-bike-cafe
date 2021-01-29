@@ -17,15 +17,10 @@ const fontRegular = Fonts.fontRegular
 
 const StartComponent = props =>{
 
-    
-    console.log(props.distanceTravelled)
-
     const [timer, setTimer] = useState(0)
     const [isActive, setIsActive] = useState(false)
     const [isPaused, setIsPaused] = useState(false)
-    const [state, setState] = useState({
-        averageSpeed: props.distanceTravelled / (timer/3600)
-    })
+
     const countRef = useRef(null)
 
     const handleStart= () => {
@@ -41,6 +36,10 @@ const StartComponent = props =>{
     const handlePause= () => {
         clearInterval(countRef.current)
         setIsPaused(false)
+
+        console.log( props.distanceTravelled )
+        console.log( props.distanceTravelled / (timer/3600))
+
         props.handleCircuit()
     }
     const handleResume= () => {
@@ -86,11 +85,18 @@ const StartComponent = props =>{
                 <Text style={styles.dataText}>{formatTime()}</Text>
             </View>
             <View style={styles.borderMiddle}>
+                <Text style={styles.labelText}>Velocidade:</Text>
+                <View style={{flexDirection:"row", alignItems:'center'}}>
+                    <Text style={styles.dataText}>{parseFloat(props.speed).toFixed(2)} </Text>
+                    <Text style={styles.labelText}>km/h </Text>
+                </View>
+            </View>
+            <View style={styles.borderMiddle}>
                 <Text style={styles.labelText}>Velocidade Média:</Text>
                 <View style={{flexDirection:"row", alignItems:'center'}}>
                     <Text style={styles.dataText}>{
-                        state.averageSpeed 
-                        ? state.averageSpeed
+                        props.distanceTravelled > 0
+                        ? parseFloat(props.distanceTravelled / (timer/3600)).toFixed(2)
                         : "0"
 
                     } </Text>
@@ -103,7 +109,7 @@ const StartComponent = props =>{
             </View>
             <View style={styles.borderTop}>
                 <Text style={styles.labelText}>Altimetria:</Text>
-                <Text style={styles.dataText}>xx.x m</Text>
+                <Text style={styles.dataText}>{parseFloat(props.altimetria).toFixed(1)} m</Text>
             </View>
 
 
@@ -166,7 +172,6 @@ const styles = StyleSheet.create({
         color:Colors.lightColor,
         fontFamily:fontRegular,
         fontSize:iconSize,
-        
         textAlign:'center',
     },
     borderBottom:{
