@@ -77,11 +77,12 @@ export default class MapScreen extends React.Component{
     componentDidMount = async () =>  {
         await Location.startLocationUpdatesAsync(LocationTaskName, {
             accuracy: Location.Accuracy.Balanced,
-            foregroundService:{
+/*            foregroundService:{
                 notificationTitle:"Noves Bike",
                 notificationBody:"O aplicativo está sendo executado em Background",
                 notificationColor:"red",
             },
+*/            
         })
     }
 
@@ -167,6 +168,7 @@ export default class MapScreen extends React.Component{
                 return;
             }
             if(data){
+                
                 const {locations} = data;
                 
                 const { coordinate, routeCoordinates, distanceTravelled, altimetria } = this.state;

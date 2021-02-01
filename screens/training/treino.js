@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { Button } from 'react-native';
 import {
   StyleSheet,
   Text,
@@ -8,7 +9,7 @@ import {
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 
-export default function App() {
+export default function App({navigation}) {
 
   // return (
   //   <SafeAreaView>
@@ -126,6 +127,8 @@ export default function App() {
       <Modal3 />
       <Modal4 />
 
+
+      <Button title="treinador" onPress={()=> navigation.push("Treinador")}/>
 
     </View>
 

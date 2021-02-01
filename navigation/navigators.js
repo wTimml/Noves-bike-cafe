@@ -15,7 +15,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import {AppLoading} from 'expo'
 import * as Font  from 'expo-font';
 
-import {SignInTeste , CreateAccount,SignIn, Home, Search, Details, RecordList, RecordDetail, Profile, Splash,MapScreens } from './navigationScreens'
+import { CreateAccount,SignIn, Home, Details, RecordList, RecordDetail, Profile, Splash,MapScreens, Training, Trainer, ChangeTraining} from './navigationScreens'
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () => (
@@ -80,6 +80,15 @@ const ProfileStackScreen= () => (
   </ProfileStack.Navigator>
 )
 
+const TrainingStack = createStackNavigator();
+const TrainingStackScreen = () => (
+  <TrainingStack.Navigator>
+   <TrainingStack.Screen name="Treinos" component={Training} options={{ title: 'Treinos',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
+   <TrainingStack.Screen name="Treinador" component={Trainer} options={{ title: 'Treinador',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
+   <TrainingStack.Screen name="Cadastro Treino" component={ChangeTraining} options={{ title: 'Cadastro Treinos',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
+  </TrainingStack.Navigator>
+)
+
 const TabsScreen =() => (
   <Tabs.Navigator>
     <Tabs.Screen name ="Perfil" component={ProfileStackScreen} options={{
@@ -93,7 +102,7 @@ const TabsScreen =() => (
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="bike" color={color} size={size} />
                     )}}/>
-    <Tabs.Screen name ="Treino" component={ProfileStackScreen} options={{
+    <Tabs.Screen name ="Treino" component={TrainingStackScreen} options={{
                     tabBarLabel: 'Treino',
                     tabBarIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="clipboard-text-outline" color={color} size={size} />

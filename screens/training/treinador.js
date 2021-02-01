@@ -15,7 +15,7 @@ const Separator = () => (
 );
 
 
-const Treinador = () => (
+const Treinador = ({navigation}) => (
     <SafeAreaView style={styles.container}>
 
         <View style={styles.titulo}>
@@ -28,7 +28,7 @@ const Treinador = () => (
             <Button style={styles.botaotreinador}
                 title="INICIANTE"
                 color="black"
-                onPress={() => Alert.alert('')}
+                onPress={()=> navigation.push("Cadastro Treino")}
             />
         </View>
         <Separator />

@@ -63,8 +63,8 @@ function getRegionForCoordinates(points) {
     return {
       latitude: midX,
       longitude: midY,
-      latitudeDelta: deltaX,
-      longitudeDelta: deltaY
+      latitudeDelta: deltaX + (deltaX * 0.5),
+      longitudeDelta: deltaY + (deltaY * 0.5)
     };
   }
 
@@ -83,7 +83,7 @@ const RecordDetailScreen = ({route}) =>{
     return(
         <ScrollView style={{backgroundColor:Colors.primaryColorDark}}>
             <View style={styles.mapContainer} >
-                <MapView style={{height:250}}  initialRegion={getRegionForCoordinates(coordinate)}> 
+                <MapView style={{height:250}} cacheEnabled={true}  region={getRegionForCoordinates(coordinate)}> 
                     <Polyline coordinates={coordinate}  strokeWidth={3} strokeColor={Colors.primaryColor} />
                 </MapView>
             </View>
@@ -146,18 +146,20 @@ const styles = StyleSheet.create({
         color:Colors.lightColor,
         fontFamily:fontRegular,
         fontSize:iconSize,
-        paddingTop:20,
+        padding:10,
     },
     labelText:{
         color:Colors.lightColor,
         fontFamily:fontRegular,
         fontSize:textSize,
-        paddingTop:20,
+        paddingTop:10,
+        paddingBottom:5,
     },
     dataText:{
         color:Colors.lightColor,
         fontFamily:fontRegular,
         fontSize:textSize,
+        paddingBottom:10
     },
     borderBottomRight:{
         flex:1,

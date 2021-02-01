@@ -8,6 +8,10 @@ import ProfileScreen from '../screens/profile/profileScreen'
 import RecordDetailScreen from '../screens/profile/recordDetailScreen'
 import RecordListScreen from '../screens/profile/recordListScreen'
 
+import Treino from '../screens/training/treino'
+import CadastroTreino from '../screens/training/cadastroTreino'
+import Treinador from '../screens/training/treinador'
+
 import Colors from '../constants/colors'
 
 
@@ -128,6 +132,22 @@ export const SignIn =({navigation}) => {
     return( 
         <SignInScreen signin={()=> signIn()} navigation={navigation}/>    
        )
+}
+
+export const Training = ({navigation}) => {
+    return(
+        <Treino navigation={navigation} />
+    )
+}
+export const Trainer = ({navigation}) => {
+    return(
+        <Treinador navigation={navigation} />
+    )
+}
+export const ChangeTraining = ({navigation}) => {
+    return(
+        <CadastroTreino navigation={navigation} />
+    )
 }
 
 
