@@ -3,8 +3,10 @@ import { View, Text, StyleSheet, Button } from 'react-native'
 
 import SignUpScreen from '../screens/signUpScreen'
 import SignInScreen from '../screens/signInScreen'
+
 import MapScreen from '../screens/mapScreen'
 import ProfileScreen from '../screens/profile/profileScreen'
+import RegisterProfileScreen from '../screens/registration/perfil/registerProfile'
 import RecordDetailScreen from '../screens/profile/recordDetailScreen'
 import RecordListScreen from '../screens/profile/recordListScreen'
 
@@ -85,7 +87,11 @@ export const Search2 = () =>(
 export const Profile= ({navigation}) => {
     const { signOut } = React.useContext(AuthContext);
     return(
-        <ProfileScreen navigation={navigation}/>
+        <ProfileScreen navigation={navigation} signOut={()=>signOut()}/>
+    )}
+export const RegisterProfile= ({navigation}) => {
+    return(
+        <RegisterProfileScreen navigation={navigation} />
     )}
 export const RecordList = ({navigation,route}) =>{
     return(
@@ -100,11 +106,6 @@ export const RecordDetail = ({navigation,route}) =>{
     )
 }
 
-export const Splash = () => (
-    <ScreenContainer>
-        <Text>Loading...</Text>
-    </ScreenContainer>
-)
 
 export const SignInTeste = ({ navigation }) => {
     const { signIn } = React.useContext(AuthContext);
@@ -120,19 +121,21 @@ export const SignInTeste = ({ navigation }) => {
     )
 }
 
-export const CreateAccount=() => {
+export const CreateAccount=({navigation}) => {
     const {signUp} = React.useContext(AuthContext)
     return( 
-        <SignUpScreen/>
+        <SignUpScreen navigation={navigation}/>
        )
 }
 
 export const SignIn =({navigation}) => {
     const {signIn} = React.useContext(AuthContext)
     return( 
-        <SignInScreen signin={()=> signIn()} navigation={navigation}/>    
+        <SignInScreen signIn={() => signIn()} navigation={navigation}/>    
        )
 }
+
+
 
 export const Training = ({navigation}) => {
     return(

@@ -5,24 +5,28 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import {createDrawerNavigator} from '@react-navigation/drawer'
 
-import {authContext, AuthContext} from '../context'
+import { AuthContext } from '../context'
 import Colors from '../constants/colors'
-import Icons from 'react-native-vector-icons/Ionicons'
+
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import Ionicons from 'react-native-vector-icons/Ionicons'
+
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native'
 
 import {AppLoading} from 'expo'
 import * as Font  from 'expo-font';
 
-import { CreateAccount,SignIn, Home, Details, RecordList, RecordDetail, Profile, Splash,MapScreens, Training, Trainer, ChangeTraining} from './navigationScreens'
+import {getUser} from '../utils'
+
+import OptionsSettings from '../components/optionsSettings'
+
+import { CreateAccount,SignIn, Home, Details, RecordList, RecordDetail,RegisterProfile, Profile, Splash,MapScreens, Training, Trainer, ChangeTraining} from './navigationScreens'
 
 const AuthStack = createStackNavigator();
 const AuthStackScreen = () => (
-  <AuthStack.Navigator>
-        
-    <AuthStack.Screen name = 'SignIn' component={SignIn} options={{ title: 'Noves Bike',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
-    <AuthStack.Screen name = 'CreateAccount' component={CreateAccount} options={({ route }) => ({title:'Cadastrar', headerTintColor:Colors.primaryColorDark, headerStyle:{backgroundColor:Colors.primaryColor}})}/>
+  <AuthStack.Navigator screenOptions={{headerTintColor:Colors.primaryColorDark, headerTitleAlign:{alignSelf:'center'},headerStyle:{backgroundColor:Colors.primaryColor}}}>
+    <AuthStack.Screen name = 'SignIn' component={SignIn} options={{ title: 'Noves Bike',headerLeft:null}}/>
+    <AuthStack.Screen name = 'CreateAccount' component={CreateAccount} options={{title:'Cadastrar'}}/>
 
   </AuthStack.Navigator>
 )
@@ -38,59 +42,65 @@ const HomeStackScreen = () => (
   </HomeStack.Navigator>
 )
 const TrackStackScreen = () => (
-  <TrackStack.Navigator>
+  <TrackStack.Navigator screenOptions={{headerTintColor:Colors.primaryColorDark, headerTitleAlign:{alignSelf:'center'},headerStyle:{backgroundColor:Colors.primaryColor}}}>
     {//<SearchStack.Screen name="Search" component={Search} options={{ title: 'Sign In',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
    // <SearchStack.Screen name="Search2" component={Search2} options={{ title: 'Sign In',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
    } 
-   <TrackStack.Screen name="MapScreen" component={MapScreens} options={{ title: 'Circuito',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
+   <TrackStack.Screen name="MapScreen" component={MapScreens} options={{ title: 'Circuito'}}/>
    
   </TrackStack.Navigator>
 )
 
 const ProfileStack = createStackNavigator();
-const ProfileStackScreen= () => (
-  <ProfileStack.Navigator>
+const ProfileStackScreen= ({navigation, route}) => {
+  React.useLayoutEffect(() => {
+    const routeName = getFocusedRouteNameFromRoute(route)
+    console.log("routeName "+routeName)
+    if(routeName === "RegisterProfile"){
+      navigation.setOptions({tabBarVisible: false})
+    }else{
+      navigation.setOptions({tabBarVisible: true})
+    }
+  }, [navigation, route])
+
+  return(
+  <ProfileStack.Navigator screenOptions={{headerTintColor:Colors.primaryColorDark, headerTitleAlign:{alignSelf:'center'},headerStyle:{backgroundColor:Colors.primaryColor}}}>
     
       <ProfileStack.Screen name="Profile" component={Profile} options={{ 
         title: 'Perfil',
-        headerTintColor:Colors.primaryColorDark,
-        headerTitleAlign:{alignSelf:'center'},
-        headerStyle:{backgroundColor:Colors.primaryColor},
         headerRight:()=> (
-          <View style={{padding:10}}>
-              <Icons onPress={() => alert('teste')} name={Platform.OS === "ios" ? "ios-settings" : "md-settings"} size={35}/>
-          </View>
+          <OptionsSettings/>
         )
       }}/>
 
       <ProfileStack.Screen name="RecordList" component={RecordList} options={{
         title:'Registro De Atividades',
-        headerTintColor:Colors.primaryColorDark,
-        headerTitleAlign:{alignSelf:'center'},
-        headerStyle:{backgroundColor:Colors.primaryColor},
       }}/>
 
       <ProfileStack.Screen name="RecordDetail" component={RecordDetail} options={{
         title:'Registro De Atividades',
-        headerTintColor:Colors.primaryColorDark,
-        headerTitleAlign:{alignSelf:'center'},
-        headerStyle:{backgroundColor:Colors.primaryColor},
       }}/>
+
+      <ProfileStack.Screen name="RegisterProfile" component={RegisterProfile} options={({route}) => ({
+        title:'Cadastro de Perfil',
+      })
+      }/>
     
   </ProfileStack.Navigator>
-)
+  )
+}
 
 const TrainingStack = createStackNavigator();
 const TrainingStackScreen = () => (
-  <TrainingStack.Navigator>
-   <TrainingStack.Screen name="Treinos" component={Training} options={{ title: 'Treinos',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
-   <TrainingStack.Screen name="Treinador" component={Trainer} options={{ title: 'Treinador',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
-   <TrainingStack.Screen name="Cadastro Treino" component={ChangeTraining} options={{ title: 'Cadastro Treinos',headerTintColor:Colors.primaryColorDark,headerTitleAlign:{alignSelf:'center'}, headerStyle:{backgroundColor:Colors.primaryColor}}}/>
+  <TrainingStack.Navigator screenOptions={{headerTintColor:Colors.primaryColorDark, headerTitleAlign:{alignSelf:'center'},headerStyle:{backgroundColor:Colors.primaryColor}}}>
+   <TrainingStack.Screen name="Treinos" component={Training} options={{ title: 'Treinos'}}/>
+   <TrainingStack.Screen name="Treinador" component={Trainer} options={{ title: 'Treinador'}}/>
+   <TrainingStack.Screen name="Cadastro Treino" component={ChangeTraining} options={{ title: 'Cadastro Treinos'}}/>
   </TrainingStack.Navigator>
 )
 
 const TabsScreen =() => (
-  <Tabs.Navigator>
+  <Tabs.Navigator >
     <Tabs.Screen name ="Perfil" component={ProfileStackScreen} options={{
                     tabBarLabel: 'Perfil',
                     tabBarIcon: ({ color, size }) => (
@@ -123,10 +133,8 @@ const RootStackScreen = ({ userToken }) =>(
   <RootStack.Navigator headerMode="none">
     {userToken ? (
       <RootStack.Screen name="App" component={DrawerStackScreen} options ={{animationEnabled: false}}/>
-  
     ):(
       <RootStack.Screen name="Auth" component={AuthStackScreen} options ={{animationEnabled: false}}/>
-  
     )}
     </RootStack.Navigator>
 
@@ -142,17 +150,17 @@ const fetchFonts = () => {
 
 export default () =>{
   const [isLoading, setIsLoading] = React.useState(true)
-  const [userToken, setUserToken] = React.useState(null)
+  const [userToken, setUserToken] = React.useState(null) //NULL PARA  IR AUTHENTICAÇÃO, SE NAO PULA DIRETO PARA A HOME
 
   const authContext = React.useMemo(() => {
     return{
       signIn: () => {
         setIsLoading(false);
-        setUserToken('asdf')
+        setUserToken('userToken')
       },
       signUp: () => {
         setIsLoading(false);
-        setUserToken('asdf')
+        setUserToken('userToken')
       },
       signOut: () => {
         setIsLoading(false);
@@ -163,18 +171,22 @@ export default () =>{
 
   /*----------------seta um tempo na tela de loading (confere se user está logado)---------------------------*/
   if(isLoading){
+    getUser()
+    .then(user=> {
+      user = JSON.parse(user)
+      if(user && user.token)
+          setUserToken('userToken')
+    })
     return (
         <AppLoading startAsync={fetchFonts} onFinish={() => setIsLoading(false)}/>
     )
   }
-  if (isLoading){
-    return <Splash/>
-  }
+
 
   return(
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
-        <RootStackScreen userToken={userToken}/>
+        <RootStackScreen userToken={userToken} />
       </NavigationContainer>
     </AuthContext.Provider>
   )
