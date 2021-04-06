@@ -1,50 +1,115 @@
 import React from "react";
+import { useState } from "react";
 import {
   StyleSheet,
   Button,
   View,
   SafeAreaView,
-  Text,
   Alert,
   TextInput,
+  Dimensions,
+  Text,
 } from "react-native";
-import AddBoxIcon from "react-native-vector-icons/EvilIcons";
+import { TouchableOpacity } from "react-native-gesture-handler";
+// import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
-const Separator = () => <View style={styles.separator} />;
 
-const cadastroTreino = () => (
-  <SafeAreaView style={styles.container}>
-    <View style={styles.master}>
-      <View>
-        <TextInput style={styles.textInputTitle}
-          placeholder="Inserir título"
-        ></TextInput>
+
+
+function CadastroTreino(props) {
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [treinos, setTreinos] = useState([]);
+  const [id, setId] = useState(0);
+  function handleKeyPressEnter(event) {
+    console.log(event.nativeEvent.key)
+}
+
+  function handleSubmit(event) {
+    console.log("Botão Submit Pressionado!");
+    console.log(title);
+    console.log(content);
+
+    const novoTreino = {
+      title: "",
+      content: "",
+      treinos: [],
+      id: id,
+    };
+
+    console.log(novoTreino);
+
+    setId(id + 1);
+
+    setTreinos([...treinos, novoTreino]);
+
+    event.preventDefault();
+  }
+  const handleChangeTitle = (e) => {
+    setTitle(e.target.value);
+    console.log(e.target.value);
+  };
+  const handleChangeContent = (e) => {
+    setContent(e);
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.master}>
+        <View style={styles.title}>
+          <TextInput
+            style={[styles.textInputTitle]}
+            placeholder="Inserir título"
+            
+          />
+        </View>
+
+        <View style={styles.content}>
+          <TextInput
+            style={[styles.textInputContent]}
+            placeholder="Inserir treino"
+            onChangeText={text => handleChangeContent(text)}
+            onSubmitEditing={handleKeyPressEnter}
+            value={content}
+          />
+        </View>
+
+        <View style={styles.btnAcao}>
+          <TouchableOpacity
+            style={{
+              borderRadius: 10,
+            }}
+            onPress={() => Alert.alert("Tem certeza que deseja confirmar?")}
+          >
+            <Text style={[styles.textButton, { backgroundColor: "green" }]}>
+              CONFIRMAR
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => Alert.alert("Tem certeza que deseja excluir?")}
+          >
+            <Text style={[styles.textButton, { backgroundColor: "red" }]}>
+              EXCLUIR
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <Separator />
 
-      <View>
-        <TextInput style={styles.textInputContent}
-          placeholder="Inserir treino"
-        ></TextInput>
-      </View>
-    </View>
+      <TouchableOpacity
+        onPress={() => Alert.alert("Deseja abrir nova aba de treino?")}
+        style={{
+          marginTop: 15,
+        }}
+      >
+        <MaterialIcons name="add-circle-outline" size={35} color="white" />
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+}
 
-    <AddBoxIcon
-      name="plus"
-      size={50}
-      color="#fff"
-      onPress={() => Alert.alert("ops, algo deu errado")}
-    />
-
-    <View style={styles.botaoConfirmar}>
-      <Button
-        title="CONFIRMAR"
-        color="#E56228"
-        onPress={() => Alert.alert("ops, algo deu errado")}
-      />
-    </View>
-  </SafeAreaView>
-);
+const width = Math.round(Dimensions.get("window").width);
+const height = Math.round(Dimensions.get("window").height);
 
 const styles = StyleSheet.create({
   container: {
@@ -56,11 +121,10 @@ const styles = StyleSheet.create({
   master: {
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 10,
-    paddingHorizontal: 60,
-    paddingBottom: 10,
+    paddingVertical: 20,
+    width: width - 40,
     backgroundColor: "#fff",
-    shadowColor: "#000",
+    shadowColor: "#0005",
     shadowOffset: {
       width: 0,
       height: 5,
@@ -74,53 +138,47 @@ const styles = StyleSheet.create({
     marginTop: 25,
   },
 
-  textInputTitle: {
-    color:"#000",
-    height: 40,
-    width: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    border:"none",
-    borderWidth: 1,
-    paddingTop: 10,
-    fontSize: 20,
- },
-
- textInputContent: {
-  color:"#000",
-  height: 40,
-  width: 200,
-  justifyContent: 'center',
-  alignItems: 'center',
-  alignSelf: 'center',
-  border:"none",
-  borderWidth: 1,
-  paddingTop: 10,
-  fontSize: 17,
-},
-
-  botaoConfirmar: {
-    backgroundColor: "#E56228",
-    padding: 10,
-    marginHorizontal: 100,
-    borderRadius: 7.5,
-    marginTop: 400,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+  title: {
+    borderBottomWidth: 1,
+    width: "90%",
+    borderColor: "#0005",
   },
 
-  separator: {
-    marginVertical: 1,
-    borderBottomColor: "#E56228",
-    borderBottomWidth: 2,
+  content: {
+    width: "100%",
+    paddingHorizontal: 20,
+    marginTop: 10,
+  },
+
+  textInputTitle: {
+    color: "#000",
+    fontSize: 20,
+    marginBottom: 20,
+    textAlign: "center",
+  },
+
+  textInputContent: {
+    color: "#000",
+    fontSize: 17,
+  },
+
+  btnAcao: {
+    width: "100%",
+    paddingHorizontal: 20,
+    marginTop: 40,
+    flexDirection: "row",
+  },
+
+  textButton: {
+    borderRadius: 5,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    alignSelf: "flex-start",
+    color: "#fff",
+    fontWeight: "bold",
+    letterSpacing: 0.5,
+    marginRight: 5,
   },
 });
 
-export default cadastroTreino;
+export default CadastroTreino;
