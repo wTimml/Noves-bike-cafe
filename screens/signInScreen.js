@@ -13,16 +13,34 @@ import MainButton from '../components/buttonOneColumn'
 
 Icon.loadFont();
 
-export default function SignInScreen (props){
+export default function SignInScreen ({navigation, signIn}){
 
     const [byEmail,setByEmail] = useState(false)
+    const [isAuthenticated,setIsAuthenticated] = useState(false)
+    
 
     const handleChange = () => {
         setByEmail(
             false
         )
     }
+
+    //Header left condicional para o Usuario voltar às opçoes de cadastro com redes sociais
+    React.useLayoutEffect(()=> {
+        byEmail ?
+        navigation.setOptions({
+            headerLeft:() => ( 
+            <TouchableOpacity onPress={handleChange}>
+                <Icon name="arrow-back" size={30} color={Colors.primaryColorDark} style={{paddingLeft:5}} activeOpacity={0.5}/>
+            </TouchableOpacity> )
+        })
+        :   
+        navigation.setOptions({headerLeft:null})
+    
+    })
+    
     return(
+        
         <ScrollView style={styles.container}>
             <View style={styles.inputView}>
                 <Image source={{uri: 'https://scontent.fbfh3-2.fna.fbcdn.net/v/t1.0-9/68878112_2370529246494639_1536561138970394624_n.png?_nc_cat=103&_nc_sid=09cbfe&_nc_eui2=AeEgrll6zefH68fEb0MiJLArQ1JEYUSYGcRDUkRhRJgZxFP2KCGikb4SJFbyV9nCr8JjsdOfL9W08mmZUiGQxGHb&_nc_ohc=Dg-Ok0DZRVgAX-2jKym&_nc_ht=scontent.fbfh3-2.fna&oh=3fe5757b35e4de95fa5b07aa94875a57&oe=5FAFEF38'}}
@@ -34,7 +52,7 @@ export default function SignInScreen (props){
 {
             byEmail
             ?
-            <SignInScreenEmail isByEmail={handleChange} navigation={props.navigation}/>
+            <SignInScreenEmail isByEmail={handleChange} navigation={navigation} signInToHome={signIn}/>
             :
 
             <View style={styles.inputView}  >
@@ -72,7 +90,7 @@ export default function SignInScreen (props){
                     button
                     type='facebook'
                     style={{width:250}}
-                    onPress={() => props.signin()}
+                    onPress={() => signIn()}
                 />
             </View>
 }

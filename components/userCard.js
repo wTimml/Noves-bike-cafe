@@ -5,7 +5,7 @@ import Font from '../constants/fonts'
 import Colors from '../constants/colors'
 
 
-const userCard = (props) =>{ 
+const userCard = ({firstName, lastName, email, style}) =>{ 
     let TouchableCmp = TouchableOpacity;
     if(Platform.OS === 'android' && Platform.Version >= 21){
         TouchableCmp = TouchableNativeFeedback
@@ -13,14 +13,14 @@ const userCard = (props) =>{
     
     return(
     <TouchableCmp >
-        <View style={{...styles.container, ...props.style}}>
+        <View style={{...styles.container, ...style}}>
             <View style={{padding:5}}>
                 <Image  style={styles.imageContainer} source={require("../logos/default-profile-icon.png")} /> 
             </View>
             
             <View style={styles.textContainer}>
-                <Text style={styles.title}>Lucas Timm</Text>
-                <Text style={styles.subTitle}>Lucas@Timm.com</Text>
+                <Text style={styles.title}>{firstName} {lastName}</Text>
+                <Text style={styles.subTitle}>{email}</Text>
             </View>
 
         </View>

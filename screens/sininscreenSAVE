@@ -1,91 +1,87 @@
 import React, { useState } from 'react'
-import { View,StyleSheet, TextInput,Text, StatusBar, ActivityIndicator } from 'react-native'
+import { View,StyleSheet, TextInput,Text, StatusBar, ActivityIndiator } from 'react-native'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import PropTypes from 'prop-types'
 
 import ButtonMain from '../components/buttonMain'
 
 import Colors from '../constants/colors'
 import { Input } from 'react-native-elements'
+import { Button } from 'react-native'
 
 import api from '../services/api'
 
-const SignInScreenEmail =({navigation, signInToHome}) =>{
+const SignInScreenEmail =({navigation},props) =>{
 
     const [state,setState] = useState({
         email:'',
         password:''
     })
     const [loading, setLoading] = useState(false);
-    const [errorMesage, setErrorMessage] = useState("");
-    
+    const [errorMesage, setErrorMessage] = useState(null);
+
     async function saveUser(user){
         try{
-         //  let userToParse = JSON.parse(await AsyncStorage.getItem('@ListApp:userToken')) // userToParse.token & userToParse.authType     
-        await AsyncStorage.setItem('@ListApp:userToken', JSON.stringify(user)) // USER = TOKEN RETORNADO PELO BACKEND PÓS LOGIN
-        await AsyncStorage.setItem('@ListApp:userEmail', state.email)
- 
-        signInToHome()
-  
+            await AsyncStorage.setItem('@ListApp:userToken', JSON.stringify(user))
         }catch(e){
-            console.log("saveUser "+e)
+            console.log(e)
         }
     }
 
-     async function signIn(){
-
-        if(state.email){
-
+    async function signIn(){
+        if(state.email === 0) return
         setLoading(true)
 
         try{
-            const email=state.email
-            const password=state.password
+            const credentials = {
+                email:state.email,
+                password:state.password
+            }
+            const response = await api.post('', credentials)//ARRUMAR URL
 
-            api
-                .post('/users/login', { email, password }) 
-                .then(res => {
-                    if(res.status === 200){ 
-                        saveUser(res.data, res.status)}
-                    else{ 
-                        setErrorMessage("Email e/ou senha incorreto(s)")}
-                })
-                .catch(e => {
-                    setLoading(false)
-                    setErrorMessage("Email e/ou senha incorreto(s)")
-                })
-                //api.get('')
+            const user = response.data
 
-                setLoading(false)
+            await saveUser(user)
+
             
- 
-            }catch(e){
-                console.log("catch signIn" +e)
-                setLoading(false)
-                setErrorMessage("Usuário não existe")
-            }}
+            setLoading(false)
+
+            //navigate para a tela principal
+            navigation.navigate({ routeName:''});
+
+        }catch(err){
+            console.log(err)
+
+            setLoading(false)
+            setErrorMessage('Usuário não existe')
+        }
+
     }
 
     return(
         <View >
             <StatusBar barStyle='light-content'/>
+
+            {!!errorMesage && <Error>{errorMesage}</Error>}
+
             <View style={styles.inputView}>
-            
-                <Text style={{color:'red', textAlign:'center'}}> {errorMesage}</Text>
-          
                 <Input style={styles.inputComponent}
                     placeholder="email"
                     autoCapitalize="none"
                     autoCorrect={false}
-                    onChangeText={text => setState({...state, email:text})}
-                    />
+                    underlineColorAndroid="rgba(0, 0, 0, 0)"
+                    value={state.email}
+                    onChangeText={setState({...state, email:state.email})}/>
 
                 <Input style={styles.inputComponent} 
                     placeholder="senha"
                     autoCapitalize="none"
                     autoCorrect={false}
                     secureTextEntry={true}
-                    onChangeText={text => setState({...state, password:text})}
+                    underlineColorAndroid="rgba(0, 0, 0, 0)"
+                    value={state.password}
+                    onChangeText={setState({...state, password:state.password})}
                     />
 
                 <ButtonMain style={{margin:10}} onPress={signIn}>
@@ -106,6 +102,7 @@ const SignInScreenEmail =({navigation, signInToHome}) =>{
                 </View>    
 
             </View>
+            <Text onPress={props.isByEmail} style={{paddingLeft:40,fontSize:18, color:Colors.lightColor}}> {'<<'} Voltar</Text>
         </View>
     )
 }
@@ -121,9 +118,9 @@ const styles = StyleSheet.create({
     inputComponent:{
         height:50,
         width:200,
-        borderRadius:15,
+        borderRadius:25,
         backgroundColor:Colors.lightColor,
-
+        marginBottom:12,
         textAlign:'center'
     },
     textLink:{
