@@ -71,12 +71,43 @@ export default class MapScreen extends React.Component{
             marginBottom:1
         }
     }
+    
+    async saveTrack(){
+
+        // try{
+        //     const {latitude, longitude, routeCoordinates, distanceTravelled, altimetria} = this.state
+        //     api
+        //         .post('/tracking', { email, password }) 
+        //         .then(res => {
+        //             if(res.status === 200){ 
+        //                 saveUser(res.data, res.status)}
+        //             else{ 
+        //                 setErrorMessage("Email e/ou senha incorreto(s)")}
+        //         })
+        //         .catch(e => {
+        //             setLoading(false)
+        //             setErrorMessage("Email e/ou senha incorreto(s)")
+        //         })
+        //         //api.get('')
+
+        //         setLoading(false)
+            
+ 
+        //     }catch(e){
+        //         console.log("catch signIn" +e)
+        //         setLoading(false)
+        //         setErrorMessage("Usuário não existe")
+        //     }
+    }
+
+
 
     
 
     componentDidMount = async () =>  {
         await Location.startLocationUpdatesAsync(LocationTaskName, {
             accuracy: Location.Accuracy.Balanced,
+            activityType:Location.ActivityType.Fitness,
 /*            foregroundService:{
                 notificationTitle:"Noves Bike",
                 notificationBody:"O aplicativo está sendo executado em Background",
@@ -168,14 +199,14 @@ export default class MapScreen extends React.Component{
                 return;
             }
             if(data){
-                
                 const {locations} = data;
+                
+                console.log('ass '+locations[0].coords.altitude)
                 
                 const { coordinate, routeCoordinates, distanceTravelled, altimetria } = this.state;
                 const { latitude, longitude } = locations[0].coords
                 const { altitude} = locations[0].coords
 
-            
                 const newCoordinate = {
                     latitude,
                     longitude
@@ -184,7 +215,12 @@ export default class MapScreen extends React.Component{
                 LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
 
                 coordinate.timing(newCoordinate,1,{useNativeDriver: true}).start()
-
+                
+                // console.log("new " + JSON.stringify(newCoordinate));
+                // console.log("long " + longitude);
+                // console.log("lat " + latitude);
+                // console.log("routeCord " + JSON.stringify(routeCoordinates));
+                // console.log(this.state.circuitOn);
                 if(this.state.circuitOn === true){
                     this.setState({
                         latitude,
@@ -209,6 +245,8 @@ export default class MapScreen extends React.Component{
             this.setState({marginBottom:1})
         }
     }
+
+    
 
     render(){
         this.taskManager()

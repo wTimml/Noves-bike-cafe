@@ -41,6 +41,8 @@ function profileScreen({navigation}){
         if(userEmail.indexOf("@") > -1){ //solve problem when userEmail its not defined yet
             api.get("/users/by-email?email="+userEmail) //users/by-email?email=lucas@tw.com URL PARA BUSCAR POR EMAIL
                 .then((response) =>{
+                    console.log(userEmail)
+                    console.log(response.data)
                     setUserId(response.data.id)
                     if(response.data.firstName === null){
                         navigation.navigate('RegisterProfile')
