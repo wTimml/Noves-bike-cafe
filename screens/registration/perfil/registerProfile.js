@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     inputComponent:{
         height:50,
         width:200,
-        borderRadius:15,
+        borderRadius:7.5,
         backgroundColor:Colors.lightColor,
         marginBottom:12,
         textAlign:'center'
