@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { Button } from 'react-native';
 import {
   StyleSheet,
   Text,
@@ -9,7 +8,7 @@ import {
 } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 
-export default function App({navigation}) {
+export default function App() {
 
   // return (
   //   <SafeAreaView>
@@ -75,7 +74,7 @@ export default function App({navigation}) {
     return (
       <Modalize
         ref={modalizeRef}
-        snapPoint={180 }
+        snapPoint={300}
       >
         <View style={styles.modal}>
           <Text style={styles.modalText}>AQUECIMENTO</Text>
@@ -128,8 +127,6 @@ export default function App({navigation}) {
       <Modal4 />
 
 
-      <Button title="treinador" onPress={()=> navigation.push("Treinador")}/>
-
     </View>
 
   );
@@ -164,18 +161,24 @@ const styles = StyleSheet.create({
   },
 
   botao: {
-    borderWidth: 1,
-    borderColor: "#ddd",
-    backgroundColor: "#fff",
+    alignItems:"center",
+    justifyContent:"center",
+    width:250,
+    height:65,
+    backgroundColor: "#CBB693",
     fontWeight: "bold",
     padding: 15,
-    borderRadius: 5,
-    marginBottom: 50
+    borderRadius: 7.5,
+    marginBottom: 45,
+    marginTop:10,
+    
   },
 
   botaoText: {
     fontWeight: "400",
     fontSize: 20,
+    color:"#fff",
+    fontWeight:"500"
 
 
   }

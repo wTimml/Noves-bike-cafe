@@ -74,11 +74,11 @@ const ProfileStackScreen= ({navigation, route}) => {
       }}/>
 
       <ProfileStack.Screen name="RecordList" component={RecordList} options={{
-        title:'Registro De Atividades',
+        title:'Histórico de atividades',
       }}/>
 
       <ProfileStack.Screen name="RecordDetail" component={RecordDetail} options={{
-        title:'Registro De Atividades',
+        title:'Histórico de atividades',
       }}/>
 
       <ProfileStack.Screen name="RegisterProfile" component={RegisterProfile} options={({route}) => ({
