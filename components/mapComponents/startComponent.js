@@ -41,9 +41,6 @@ const StartComponent = props =>{
         clearInterval(countRef.current)
         setIsPaused(false)
 
-        console.log( props.distanceTravelled )
-        console.log( props.distanceTravelled / (timer/3600))
-
         props.handleCircuit()
     }
     const handleResume= () => {
@@ -72,7 +69,6 @@ const StartComponent = props =>{
 
         return `${getHours}: ${getMinutes} : ${getSeconds}`
     }
-
 
 
     return(
@@ -132,7 +128,7 @@ const StartComponent = props =>{
                                     placeholder="Título"
                                     onChangeText={text => setTitle({text})}
                                 />
-                                <FilePicker/>
+                                {/* <FilePicker/> */}
                                 <View style={{padding:10}}></View>                    
                                 <View style={{flexDirection:'row'}}>
                                     

@@ -45,20 +45,22 @@ function SignUpScreen({navigation}) {
             const firstName = state.firstName
             const lastName = state.lastName
             const picture = state.picture
-
             api
                 .post('/profile/', { firstName, lastName, picture }) 
                 .then(res => {
                     if(res.status === 200){ 
                         setErrorMessage("")
                         createAlert()
+                        console.log(res.data)
                     }else{ 
                         setErrorMessage("Email e/ou senha preenchido incorretamente")
+
                     }
                 })
                 .catch(e => {
                     setLoading(false)
-                    setErrorMessage("Email ja cadastrado")
+                    setErrorMessage("Erro no servidor")
+                    
                 })
                 
 
