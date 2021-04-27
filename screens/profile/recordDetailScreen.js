@@ -147,6 +147,7 @@ const styles = StyleSheet.create({
         fontFamily:fontRegular,
         fontSize:iconSize,
         padding:10,
+        color:"#fff"
     },
     labelText:{
         color:Colors.lightColor,
@@ -154,12 +155,14 @@ const styles = StyleSheet.create({
         fontSize:textSize,
         paddingTop:10,
         paddingBottom:5,
+        color:"#fff"
     },
     dataText:{
         color:Colors.lightColor,
         fontFamily:fontRegular,
         fontSize:textSize,
-        paddingBottom:10
+        paddingBottom:10,
+        color:"#fff"
     },
     borderBottomRight:{
         flex:1,
