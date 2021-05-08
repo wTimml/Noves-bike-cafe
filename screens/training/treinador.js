@@ -1,114 +1,82 @@
-
 import React from "react";
-import {
-  StyleSheet,
-  Button,
-  View,
-  SafeAreaView,
-  Text
-} from "react-native";
+import { StyleSheet, Button, View, SafeAreaView, Text } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
+import { MaterialIcons } from "@expo/vector-icons";
+import Card from "./cadastroTreino";
 
 const Separator = () => <View style={styles.separator} />;
 
 const Treinador = () => (
   <SafeAreaView style={styles.container}>
-    <View style={styles.titulo}>
-      <Text style={styles.titulo}>Seja bem vindo treinador!</Text>
-    </View>
+    <ScrollView>
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>Nível de grupo</Text>
 
-    <View style={styles.botaotreinador}>
-      <Button
-        style={styles.botaotreinador}
-        title="INICIANTE"
-        color="#E56228"
-        onPress={() => navigation.navigate("cadastroTreino")}
-      />
-    </View>
+        <View style={styles.select}></View>
+      </View>
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>Nível de grupo</Text>
 
-    <Separator />
+        <View style={styles.select}></View>
+      </View>
 
-    <View style={styles.botaotreinador}>
-      <Button
-        style={styles.botaotreinador}
-        title="INTERMEDIÁRIO"
-        color="#E56228"
-        onPress={() => navigation.navigate("cadastroTreino")}
-      />
-    </View>
-    <Separator />
+      <Separator />
 
-    <View style={styles.botaotreinador}>
-      <Button
-        title="AVANÇADO"
-        color="#E56228"
-        onPress={() => navigation.navigate("cadastroTreino")}
-      />
-    </View>
+      <Text style={styles.label}>Atividades</Text>
 
-    <Separator />
+      <Card title="Título" description="Descrição" />
 
-    <View style={styles.botaovoltar}>
-      <Button
-        title="VOLTAR"
-        color="#E56228"
-        onPress={() => navigation.navigate("cadastroTreino")}
-      />
-    </View>
+      <TouchableOpacity style={styles.add}
+        onPress={() => alert("Implementar mais card?")}
+      >
+        <MaterialIcons name="add" size={30} color="white" />
+      </TouchableOpacity>
+    </ScrollView>
   </SafeAreaView>
 );
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    paddingHorizontal: 30,
+    justifyContent: "flex-start",
     backgroundColor: "#293a2e",
+    paddingVertical: 30,
   },
 
-  botaotreinador: {
+  formGroup: {
+    marginBottom: 30,
+  },
+
+  add: {
+    alignSelf:"center",
+    padding:10
+  },
+
+  select: {
     backgroundColor: "#E56228",
-    padding: 18,
-    margin: 25,
-    marginHorizontal: 50,
     borderRadius: 7.5,
+    height: 46,
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.34,
     shadowRadius: 5.27,
-
     elevation: 4,
-    marginTop: 15,
-    borderRadius: 7.5,
-    marginTop: 20,
-  },
-
-  botaovoltar: {
-    backgroundColor: "#E56228",
-    padding: 10,
-    marginTop: 25,
-    marginHorizontal: 110,
     borderRadius: 7.5,
   },
 
-  titulo: {
-    textAlign: "center",
-    marginVertical: 8,
-    alignItems: "center",
+  label: {
     color: "#fff",
-    fontWeight: "bold",
-    fontSize: 25,
-    marginBottom: 20,
+    marginBottom: 8,
+    fontSize: 15,
   },
 
-  fixToText: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
   separator: {
-    marginVertical: 10,
-    marginHorizontal: 20,
-    borderBottomColor: "#E56228",
+    marginBottom: 30,
+    borderBottomColor: "#fff",
     borderBottomWidth: 1,
   },
 });
