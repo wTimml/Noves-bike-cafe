@@ -42,78 +42,67 @@ const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.01;
 const LONGITUDE_DELTA = 0.02;
 const LATITUDE = -25.540794;
-const LONGITUDE = -54.5832818
+const LONGITUDE = -54.5832818;
 
-const iconSize = 18
-const fontRegular = Fonts.fontRegular
+const iconSize = 18;
+const fontRegular = Fonts.fontRegular;
 
-export default class MapScreen extends React.Component{
-    
-    
+export default class MapScreen extends React.Component {
+  constructor(props) {
+    super(props);
 
-    constructor(props){
-        super(props)
+    this.state = {
+      latitude: LATITUDE,
+      longitude: LONGITUDE,
+      routeCoordinates: [],
+      distanceTravelled: 0,
+      prevLatLng: {},
+      mapHeight: MapHeight,
+      speed: 0,
+      altitude_: 0,
+      altitude_Aux: 0,
+      altimetria: 0,
+      coordinate: new AnimatedRegion({
+        latitude: LATITUDE,
+        longitude: LONGITUDE,
+        latitudeDelta: 0,
+        longitudeDelta: 0,
+      }),
 
-        this.state = {
-            latitude : LATITUDE,
-            longitude : LONGITUDE,
-            routeCoordinates: [],
-            distanceTravelled: 0,
-            prevLatLng: {},
-            mapHeight:MapHeight,
-            speed:0,
-            altitude_:0,
-            altitude_Aux:0,
-            altimetria:0,
-            coordinate: new AnimatedRegion({
-                latitude: LATITUDE,
-                longitude: LONGITUDE,
-                latitudeDelta: 0,
-                longitudeDelta:0
-            }),
-            
-            circuitOn : false,
-            marginBottom:1
-        }
-    }
-    
-    async saveTrack(){
+      circuitOn: false,
+      marginBottom: 1,
+    };
+  }
 
-        // try{
-        //     const {latitude, longitude, routeCoordinates, distanceTravelled, altimetria} = this.state
-        //     api
-        //         .post('/tracking', { email, password }) 
-        //         .then(res => {
-        //             if(res.status === 200){ 
-        //                 saveUser(res.data, res.status)}
-        //             else{ 
-        //                 setErrorMessage("Email e/ou senha incorreto(s)")}
-        //         })
-        //         .catch(e => {
-        //             setLoading(false)
-        //             setErrorMessage("Email e/ou senha incorreto(s)")
-        //         })
-        //         //api.get('')
+  async saveTrack() {
+    // try{
+    //     const {latitude, longitude, routeCoordinates, distanceTravelled, altimetria} = this.state
+    //     api
+    //         .post('/tracking', { email, password })
+    //         .then(res => {
+    //             if(res.status === 200){
+    //                 saveUser(res.data, res.status)}
+    //             else{
+    //                 setErrorMessage("Email e/ou senha incorreto(s)")}
+    //         })
+    //         .catch(e => {
+    //             setLoading(false)
+    //             setErrorMessage("Email e/ou senha incorreto(s)")
+    //         })
+    //         //api.get('')
+    //         setLoading(false)
+    //     }catch(e){
+    //         console.log("catch signIn" +e)
+    //         setLoading(false)
+    //         setErrorMessage("Usuário não existe")
+    //     }
+  }
 
-        //         setLoading(false)
-            
- 
-        //     }catch(e){
-        //         console.log("catch signIn" +e)
-        //         setLoading(false)
-        //         setErrorMessage("Usuário não existe")
-        //     }
-    }
-
-
-
-    
-
-    componentDidMount = async () =>  {
-        await Location.startLocationUpdatesAsync(LocationTaskName, {
-            accuracy: Location.Accuracy.Balanced,
-            activityType:Location.ActivityType.Fitness,
-/*            foregroundService:{
+  componentDidMount = async () => {
+    await Location.startLocationUpdatesAsync(LocationTaskName, {
+      accuracy: Location.Accuracy.Balanced,
+      activityType: Location.ActivityType.Fitness,
+      /*            foregroundService:{
                 notificationTitle:"Noves Bike",
                 notificationBody:"O aplicativo está sendo executado em Background",
                 notificationColor:"red",
@@ -189,62 +178,65 @@ export default class MapScreen extends React.Component{
       });
       //     console.log("altitude_aux >")
     }
-}
+  };
 
+  taskManager = () => {
+    TaskManager.defineTask(LocationTaskName, ({ data, error }) => {
+      if (error) {
+        console.log(error);
+        return;
+      }
+      if (data) {
+        const { locations } = data;
 
-   taskManager = () =>{
-        TaskManager.defineTask(LocationTaskName, ({data, error}) => {
-            if(error){
-                console.log(error)
-                return;
-            }
-            if(data){
-                const {locations} = data;
-                
-                console.log('ass '+locations[0].coords.altitude)
-                
-                const { coordinate, routeCoordinates, distanceTravelled, altimetria } = this.state;
-                const { latitude, longitude } = locations[0].coords
-                const { altitude} = locations[0].coords
+        console.log("ass " + locations[0].coords.altitude);
 
-                const newCoordinate = {
-                    latitude,
-                    longitude
-                };
+        const {
+          coordinate,
+          routeCoordinates,
+          distanceTravelled,
+          altimetria,
+        } = this.state;
+        const { latitude, longitude } = locations[0].coords;
+        const { altitude } = locations[0].coords;
 
-                LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
+        const newCoordinate = {
+          latitude,
+          longitude,
+        };
 
-                coordinate.timing(newCoordinate,1,{useNativeDriver: true}).start()
-                
-                // console.log("new " + JSON.stringify(newCoordinate));
-                // console.log("long " + longitude);
-                // console.log("lat " + latitude);
-                // console.log("routeCord " + JSON.stringify(routeCoordinates));
-                // console.log(this.state.circuitOn);
-                if(this.state.circuitOn === true){
-                    this.setState({
-                        latitude,
-                        longitude,
-                        routeCoordinates: routeCoordinates.concat([newCoordinate]),
-                        distanceTravelled: distanceTravelled + this.calcDistance(newCoordinate),
-                        speed: locations[0].coords.speed,
-                        prevLatLng: newCoordinate,
-                        altitude_: altitude,
-                        altimetria:  altimetria  + this.calcAltimetria()
-                    });
-                }
-            }
+        LogBox.ignoreLogs(["Animated: `useNativeDriver`"]);
 
-    
-        })
-    }
-    _onMapReady = () => {
-        if(this.state.marginBottom===1){
-            this.setState({marginBottom: 0})
-        }else{
-            this.setState({marginBottom:1})
+        coordinate.timing(newCoordinate, 1, { useNativeDriver: true }).start();
+
+        // console.log("new " + JSON.stringify(newCoordinate));
+        // console.log("long " + longitude);
+        // console.log("lat " + latitude);
+        // console.log("routeCord " + JSON.stringify(routeCoordinates));
+        // console.log(this.state.circuitOn);
+        if (this.state.circuitOn === true) {
+          this.setState({
+            latitude,
+            longitude,
+            routeCoordinates: routeCoordinates.concat([newCoordinate]),
+            distanceTravelled:
+              distanceTravelled + this.calcDistance(newCoordinate),
+            speed: locations[0].coords.speed,
+            prevLatLng: newCoordinate,
+            altitude_: altitude,
+            altimetria: altimetria + this.calcAltimetria(),
+          });
         }
-      };
+      }
+    });
+  };
+  _onMapReady = () => {
+    if (this.state.marginBottom === 1) {
+      this.setState({ marginBottom: 0 });
+    } else {
+      this.setState({ marginBottom: 1 });
+    }
+  };
 
   _onMapReady = () => {
     if (this.state.marginBottom === 1) {
@@ -253,30 +245,32 @@ export default class MapScreen extends React.Component{
       this.setState({ marginBottom: 1 });
     }
   };
-    
 
-    render(){
-        this.taskManager()
-        
-        return(
-            <View style={styles.container}>
-                <LocationPermission/>
-                <View style={{height:this.state.mapHeight, width:width}}>
-                   {
-                   this.state.mapHeight===MapHeight ?(
-                    <MapView    style={{...styles.map, marginBottom:this.state.marginBottom}}
-                                provider={PROVIDER_GOOGLE}   
-                                showsUserLocation = {true}
-                                followsUserLocation = {true}
-                                loadingEnabled = {false}
-                                region={this.getMapRegion()}
-                                showsMyLocationButton={true}
-                                onMapReady={this._onMapReady}
-                                >
+  render() {
+    this.taskManager();
 
-                            <Polyline coordinates={this.state.routeCoordinates} strokeWidth={3} strokeColor={Colors.primaryColor}
-                             lineCap={'square'}  />
-                            {/*<Marker.Animated ref={marker=>{
+    return (
+      <View style={styles.container}>
+        <LocationPermission />
+        <View style={{ height: this.state.mapHeight, width: width }}>
+          {this.state.mapHeight === MapHeight ? (
+            <MapView
+              style={{ ...styles.map, marginBottom: this.state.marginBottom }}
+              provider={PROVIDER_GOOGLE}
+              showsUserLocation={true}
+              followsUserLocation={true}
+              loadingEnabled={false}
+              region={this.getMapRegion()}
+              showsMyLocationButton={true}
+              onMapReady={this._onMapReady}
+            >
+              <Polyline
+                coordinates={this.state.routeCoordinates}
+                strokeWidth={3}
+                strokeColor={Colors.primaryColor}
+                lineCap={"square"}
+              />
+              {/*<Marker.Animated ref={marker=>{
                                 this.marker = marker
                             }} 
                             coordinate={this.state.coordinate}
