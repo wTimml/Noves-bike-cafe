@@ -74,34 +74,9 @@ export default class MapScreen extends React.Component {
     };
   }
 
-  async saveTrack() {
-    // try{
-    //     const {latitude, longitude, routeCoordinates, distanceTravelled, altimetria} = this.state
-    //     api
-    //         .post('/tracking', { email, password })
-    //         .then(res => {
-    //             if(res.status === 200){
-    //                 saveUser(res.data, res.status)}
-    //             else{
-    //                 setErrorMessage("Email e/ou senha incorreto(s)")}
-    //         })
-    //         .catch(e => {
-    //             setLoading(false)
-    //             setErrorMessage("Email e/ou senha incorreto(s)")
-    //         })
-    //         //api.get('')
-    //         setLoading(false)
-    //     }catch(e){
-    //         console.log("catch signIn" +e)
-    //         setLoading(false)
-    //         setErrorMessage("Usuário não existe")
-    //     }
-  }
-
   componentDidMount = async () => {
     await Location.startLocationUpdatesAsync(LocationTaskName, {
       accuracy: Location.Accuracy.Balanced,
-      activityType: Location.ActivityType.Fitness,
       /*            foregroundService:{
                 notificationTitle:"Noves Bike",
                 notificationBody:"O aplicativo está sendo executado em Background",
@@ -178,6 +153,7 @@ export default class MapScreen extends React.Component {
       });
       //     console.log("altitude_aux >")
     }
+    return altimetrias;
   };
 
   taskManager = () => {
@@ -188,8 +164,6 @@ export default class MapScreen extends React.Component {
       }
       if (data) {
         const { locations } = data;
-
-        console.log("ass " + locations[0].coords.altitude);
 
         const {
           coordinate,
@@ -209,11 +183,6 @@ export default class MapScreen extends React.Component {
 
         coordinate.timing(newCoordinate, 1, { useNativeDriver: true }).start();
 
-        // console.log("new " + JSON.stringify(newCoordinate));
-        // console.log("long " + longitude);
-        // console.log("lat " + latitude);
-        // console.log("routeCord " + JSON.stringify(routeCoordinates));
-        // console.log(this.state.circuitOn);
         if (this.state.circuitOn === true) {
           this.setState({
             latitude,
@@ -230,14 +199,6 @@ export default class MapScreen extends React.Component {
       }
     });
   };
-  _onMapReady = () => {
-    if (this.state.marginBottom === 1) {
-      this.setState({ marginBottom: 0 });
-    } else {
-      this.setState({ marginBottom: 1 });
-    }
-  };
-
   _onMapReady = () => {
     if (this.state.marginBottom === 1) {
       this.setState({ marginBottom: 0 });

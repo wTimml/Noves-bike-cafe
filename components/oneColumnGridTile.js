@@ -10,11 +10,24 @@ import {
 import Font from "../constants/fonts";
 import Colors from "../constants/colors";
 
+const formatTime =(time) => {
+
+  const getSeconds = `0${(time % 60)}`.slice(-2)  
+  const minutes = `${Math.floor(time / 60)}`
+  const getMinutes = `0${minutes % 60}`.slice(-2)
+  const getHours = `0${Math.floor(time / 3600)}`.slice(-2)
+
+  return `${getHours}: ${getMinutes} : ${getSeconds}`
+}
+
 const OneColumnGridTile = (props) => {
   let TouchableCmp = TouchableOpacity;
   if (Platform.OS === "android" && Platform.Version >= 21) {
     TouchableCmp = TouchableNativeFeedback;
   }
+  const { distance } = props
+
+
   return (
     <View style={styles.gridItem}>
       <TouchableCmp style={{ flex: 1 }} onPress={props.onSelect}>
@@ -28,12 +41,14 @@ const OneColumnGridTile = (props) => {
             <Text style={styles.title} numberOfLines={2}>
               {props.title}
             </Text>
-            <Text style={styles.subTitle}>{props.date}</Text>
+            <Text style={styles.subTitle}>{parseFloat(distance).toFixed(2)} km/h</Text>
           </View>
+          
           <View style={styles.subContainer}>
-            <Text style={styles.subTitle}>{props.distance}</Text>
-            <Text style={styles.subTitle}>{props.time}</Text>
+            <Text style={styles.title}>{props.date}</Text>
+            <Text style={styles.subTitle}>{formatTime(props.time)}</Text>
           </View>
+          
         </View>
       </TouchableCmp>
     </View>
@@ -57,11 +72,14 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 3,
     padding: 15,
+    justifyContent: "space-around",
+    flexDirection:'row'
   },
   title: {
     fontFamily: Font.fontRegular,
     fontSize: 22,
     color: "#fff",
+    paddingBottom:5
   },
   subTitle: {
     fontFamily: Font.fontRegular,
@@ -69,9 +87,10 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   subContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
+    flexDirection: "column",
+    alignContent:'center',
+    alignItems:'center',
+    
   },
 });
 
