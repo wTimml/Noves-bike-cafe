@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     width: width - 40,
     backgroundColor: "#fff",
-    shadowColor: "#0005",
+    shadowColor: "#0003",
     shadowOffset: {
       width: 0,
       height: 5,
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   title: {
     borderBottomWidth: 1,
     width: "90%",
-    borderColor: "#0005",
+    borderColor: "#0003",
   },
 
   content: {
