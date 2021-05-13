@@ -31,6 +31,8 @@ import Icon from "react-native-vector-icons/Feather";
 import { ScrollView } from "react-native-gesture-handler";
 
 import Fonts from "../constants/fonts";
+import {  getUserEmail } from "../utils";
+import api from '../services/api'
 
 const LocationTaskName = "firstTask";
 
@@ -48,8 +50,6 @@ const iconSize = 18
 const fontRegular = Fonts.fontRegular
 
 export default class MapScreen extends React.Component{
-    
-    
 
     constructor(props){
         super(props)
@@ -73,42 +73,13 @@ export default class MapScreen extends React.Component{
             }),
             
             circuitOn : false,
-            marginBottom:1
+            marginBottom:1,
+            timer: 0,
+            description:'',
+            title:''
         }
     }
     
-    async saveTrack(){
-
-        // try{
-        //     const {latitude, longitude, routeCoordinates, distanceTravelled, altimetria} = this.state
-        //     api
-        //         .post('/tracking', { email, password }) 
-        //         .then(res => {
-        //             if(res.status === 200){ 
-        //                 saveUser(res.data, res.status)}
-        //             else{ 
-        //                 setErrorMessage("Email e/ou senha incorreto(s)")}
-        //         })
-        //         .catch(e => {
-        //             setLoading(false)
-        //             setErrorMessage("Email e/ou senha incorreto(s)")
-        //         })
-        //         //api.get('')
-
-        //         setLoading(false)
-            
- 
-        //     }catch(e){
-        //         console.log("catch signIn" +e)
-        //         setLoading(false)
-        //         setErrorMessage("Usuário não existe")
-        //     }
-    }
-
-
-
-    
-
     componentDidMount = async () =>  {
         await Location.startLocationUpdatesAsync(LocationTaskName, {
             accuracy: Location.Accuracy.Balanced,
@@ -148,6 +119,58 @@ export default class MapScreen extends React.Component{
       this.setState({ circuitOn: false });
     }
   };
+
+  handleStartComponentEndData = async (timer, title, description) => {
+
+    // try{
+      const {routeCoordinates, distanceTravelled, altimetria, speed} = this.state
+      const distance = distanceTravelled;
+      const averageSpeed = parseFloat(distanceTravelled / (timer/3600))
+      const elevation = altimetria;
+      const route =  routeCoordinates;
+      
+      const timing = timer;
+
+    try {
+
+      getUserEmail().then((email) =>
+        api
+        .get("/users/by-email?email=" + email) //users/by-email?email=lucas@tw.com URL PARA BUSCAR POR EMAIL
+        .then((response) => {
+          var userAuth = response.data
+
+          try{
+            api
+                .post('/tracking', { title, description, distance, averageSpeed, elevation, route, timing, userAuth }) 
+                .then(res => {
+                    if(res.status === 200){
+                        saveUser(res.data, res.status)
+                    }
+                    else{ 
+                        setErrorMessage("Error Status  not 200 line 155 mapScreen")}
+                })
+                .catch(e => {
+                    setLoading(false)
+                    setErrorMessage("catch erorr mapSceren")
+                })
+                //api.get('')
+      
+            }catch(e){
+                console.log("catch signIn" +e)
+                setLoading(false)
+                setErrorMessage("try catch error mapScreen")
+            }
+            
+        })
+      )
+    }catch{
+      console.log("catch getUser" +e)
+      setLoading(false)
+      setErrorMessage("try catch error mapScreen 155")
+    }
+    
+  
+  }
 
   handleMapHeight = () => {
     if (this.state.mapHeight === MapHeight) {
@@ -201,7 +224,6 @@ export default class MapScreen extends React.Component{
             if(data){
                 const {locations} = data;
                 
-                console.log('ass '+locations[0].coords.altitude)
                 
                 const { coordinate, routeCoordinates, distanceTravelled, altimetria } = this.state;
                 const { latitude, longitude } = locations[0].coords
@@ -320,6 +342,7 @@ export default class MapScreen extends React.Component{
               distanceTravelled={this.state.distanceTravelled}
               altimetria={this.state.altimetria}
               speed={this.state.speed}
+              handleStartComponentEndData={this.handleStartComponentEndData}
             />
           </ScrollView>
         </View>

@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/Feather'
 import { Input } from 'react-native-elements'
 import FilePicker from '../../components/filePicker'
 
+
 const {width,height} = Dimensions.get("window")
 
 const iconSize = 50
@@ -23,7 +24,9 @@ const StartComponent = props =>{
     const [isActive, setIsActive] = useState(false)
     const [isPaused, setIsPaused] = useState(false)
     const [title, setTitle] = useState('')
+    const [description, setDescription] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
+    const [userAuth, setUserAuth] = useState(false)
 
     const countRef = useRef(null)
 
@@ -70,6 +73,14 @@ const StartComponent = props =>{
         return `${getHours}: ${getMinutes} : ${getSeconds}`
     }
 
+    const handleEnd = () => {
+        setModalVisible(!modalVisible)
+
+        const titleToString = title.text
+        const descriptionToString = description.text
+        props.handleStartComponentEndData(timer,titleToString,descriptionToString)
+        // handleReset();
+    };
 
     return(
         <View style={{alignItems:'center'}} >
@@ -128,6 +139,12 @@ const StartComponent = props =>{
                                     placeholder="Título"
                                     onChangeText={text => setTitle({text})}
                                 />
+
+                                <Input style={styles.inputComponent}
+                                    placeholder="Descrição"
+                                    onChangeText={text => setDescription({text})}
+                                />
+                                
                                 {/* <FilePicker/> */}
                                 <View style={{padding:10}}></View>                    
                                 <View style={{flexDirection:'row'}}>
@@ -136,12 +153,12 @@ const StartComponent = props =>{
                                         style={[styles.buttonModal, styles.buttonClose]}
                                         onPress={() => setModalVisible(!modalVisible)}
                                     >
-                                    <Text style={styles.buttonText}>Cancelar</Text>
+                                    <Text style={styles.buttonText}>Retomar Corrida</Text>
                                     </Pressable>
                                     <View style={{width:width/3.5}}></View>
                                     <Pressable
                                         style={[styles.buttonModal, styles.buttonClose]}
-                                        onPress={() => setModalVisible(!modalVisible)}
+                                        onPress={() => handleEnd()}
                                     >
                                     <Text style={styles.buttonText}>Salvar</Text>
                                     </Pressable>

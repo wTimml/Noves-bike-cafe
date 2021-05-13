@@ -67,6 +67,21 @@ function getRegionForCoordinates(points) {
       longitudeDelta: deltaY + (deltaY * 0.5)
     };
   }
+  const formatTime =(time) => {
+
+    const getSeconds = `0${(time % 60)}`.slice(-2)  
+    const minutes = `${Math.floor(time / 60)}`
+    const getMinutes = `0${minutes % 60}`.slice(-2)
+    const getHours = `0${Math.floor(time / 3600)}`.slice(-2)
+
+    return `${getHours}: ${getMinutes} : ${getSeconds}`
+}
+
+const formatDate = (date) => {
+    let oldDate = date.split('-');
+
+    return `${oldDate[2]}/${oldDate[1]}/${oldDate[0]}`
+}
 
 const RecordDetailScreen = ({route}) =>{
 
@@ -76,31 +91,31 @@ const RecordDetailScreen = ({route}) =>{
             <Text style={{fontSize:50}}>{time}</Text>
             <Text style={{fontSize:50}}>{date}</Text>
 */
-    const {title,distance,time,date} = route.params;
-
- 
+    const {title,description,distance,ROUTE,time,date,averageSpeed} = route.params;
     
     return(
         <ScrollView style={{backgroundColor:Colors.primaryColorDark}}>
             <View style={styles.mapContainer} >
-                <MapView style={{height:250}} cacheEnabled={true}  region={getRegionForCoordinates(coordinate)}> 
-                    <Polyline coordinates={coordinate}  strokeWidth={3} strokeColor={Colors.primaryColor} />
+                <MapView style={{height:250}} cacheEnabled={true}  region={getRegionForCoordinates(ROUTE)}> 
+                    <Polyline coordinates={ROUTE} strokeWidth={3} strokeColor={Colors.primaryColor} />
                 </MapView>
             </View>
             
             
             <View style={styles.borderBottom}>
                 <Text style={styles.title}>{title}</Text>
+
+                <Text style={styles.dataText}>{description}</Text>
             </View>
 
             <View style={styles.inLineData}>
                 <View style={styles.borderBottomRight}>
                     <Text style={styles.labelText}>Duração:</Text>
-                    <Text style={styles.dataText}>{time}</Text>
+                    <Text style={styles.dataText}>{formatTime(time)}</Text>
                 </View>
                 <View style={styles.borderBottom}>
                     <Text style={styles.labelText}>Data:</Text>
-                    <Text style={styles.dataText}>{date}</Text>
+                    <Text style={styles.dataText}>{formatDate(date)}</Text>
                 </View>
             </View>
 
@@ -112,7 +127,7 @@ const RecordDetailScreen = ({route}) =>{
                             ? parseFloat(props.distanceTravelled / (timer/3600)).toFixed(2)
                             : "0"
     */}</Text>
-                        <Text style={styles.dataText}>0 km/h </Text>
+                        <Text style={styles.dataText}>{averageSpeed} km/h</Text>
                     </View>
                 </View>
                 <View style={styles.borderBottom}>
