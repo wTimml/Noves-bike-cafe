@@ -1,26 +1,23 @@
 import React from "react";
 import { useState } from "react";
-import {
-  StyleSheet,
-  Button,
-  View,
-  SafeAreaView,
-  Alert,
-  TextInput,
-  Dimensions,
-  Text,
-} from "react-native";
+import { StyleSheet, View, TextInput } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-function CadastroTreino({ title, description }) {
+function CadastroTreino({ title, description, onDeletePress }) {
+  const [textTitle, onChangeTitle] = useState(title);
+  const [textDescription, onChangeDescription] = useState(description);
+
   return (
     <View style={styles.card}>
       <View style={[styles.viewTitle]}>
-        <Text style={[styles.title]}>{title}</Text>
-        <TouchableOpacity
-          onPress={() => Alert.alert("Tem certeza que deseja excluir?")}
-        >
+        <TextInput
+          style={[styles.title]}
+          value={textTitle}
+          onChangeText={(text) => onChangeTitle(text)}
+        />
+
+        <TouchableOpacity onPress={onDeletePress}>
           <MaterialCommunityIcons
             name="trash-can-outline"
             size={24}
@@ -28,13 +25,15 @@ function CadastroTreino({ title, description }) {
           />
         </TouchableOpacity>
       </View>
-      <Text style={[styles.description]}>{description}</Text>
+      <TextInput
+        style={[styles.description]}
+        value={textDescription}
+        multiline={true}
+        onChangeText={(text) => onChangeDescription(text)}
+      />
     </View>
   );
 }
-
-const width = Math.round(Dimensions.get("window").width);
-const height = Math.round(Dimensions.get("window").height);
 
 const styles = StyleSheet.create({
   card: {
@@ -46,6 +45,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 5,
     },
+
     shadowOpacity: 0.34,
     shadowRadius: 6.27,
     elevation: 10,

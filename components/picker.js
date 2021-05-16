@@ -1,12 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import {
-  AppRegistry,
-  SectionList,
   StyleSheet,
-  Text,
   View,
-  TouchableOpacity,
-  TextInput,
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import { MaterialIcons } from "@expo/vector-icons";

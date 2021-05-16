@@ -1,10 +1,18 @@
-import React, { useState } from "react";
-import { StyleSheet, Button, View, SafeAreaView, Text } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  View,
+  SafeAreaView,
+  Text,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { ScrollView } from "react-native-gesture-handler";
 import { MaterialIcons } from "@expo/vector-icons";
 import Card from "./cadastroTreino";
 import Picker from "../../components/picker";
+import data from "../../data.js";
 
 const Separator = () => <View style={styles.separator} />;
 
@@ -23,44 +31,71 @@ const Treinador = () => {
 
   const [groupLevelSelected, setGroupLevelSelected] = useState(null);
   const [groupTrainingSelected, setGroupTrainingSelected] = useState(null);
+  const [atividades, setAtividades] = useState([]);
+
+  useEffect(() => {
+    setAtividades(data.atividades);
+  }, []);
+
+  const handleAdd = () => {
+    setAtividades([
+      ...atividades,
+      {
+        title: "adicionar titulo",
+        description: "adicionar descricao",
+      },
+    ]);
+  };
+
+  const deleteCard = (indexSelected) => {
+    const ativ = atividades.filter((value, index) => index !== indexSelected);
+    setAtividades(ativ);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>Nível de grupo</Text>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "position" : "height"}
+      >
+        <ScrollView>
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Nível de grupo</Text>
 
-          <Picker
-            style={styles.select}
-            data={groupLevel}
-            onValueChange={(level) => setGroupLevelSelected(level)}
-          />
-        </View>
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>Treino</Text>
-          <Picker
-            style={styles.select}
-            data={groupTraining}
-            onValueChange={(training) => setGroupTrainingSelected(training)}
-          />
-        </View>
+            <Picker
+              style={styles.select}
+              data={groupLevel}
+              onValueChange={(level) => setGroupLevelSelected(level)}
+            />
+          </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Treino</Text>
+            <Picker
+              style={styles.select}
+              data={groupTraining}
+              onValueChange={(training) => setGroupTrainingSelected(training)}
+            />
+          </View>
 
-        <Separator />
+          <Separator />
 
-        <Text style={styles.label}>Atividades</Text>
+          <Text style={styles.label}>Atividades</Text>
 
-        <Card title="Título" description="Descrição" />
+          {atividades.map((atividade, index) => {
+            return (
+              <Card
+                key={index}
+                title={atividade.title}
+                description={atividade.description}
+                onDeletePress={() => deleteCard(index)}
+              />
+            );
+          })}
 
-        <TouchableOpacity
-          style={styles.add}
-          onPress={() =>
-            alert(
-              `Level: ${groupLevelSelected}, training: ${groupTrainingSelected}`
-            )
-          }
-        >
-          <MaterialIcons name="add" size={30} color="white" />
-        </TouchableOpacity>
-      </ScrollView>
+          <TouchableOpacity style={styles.add} onPress={handleAdd}>
+            <MaterialIcons name="add" size={30} color="white" />
+          </TouchableOpacity>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
