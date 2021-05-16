@@ -4,9 +4,18 @@ import { StyleSheet, View, TextInput } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-function CadastroTreino({ title, description, onDeletePress }) {
+function CadastroTreino({ title, description, onDeletePress, onValueChange }) {
   const [textTitle, onChangeTitle] = useState(title);
   const [textDescription, onChangeDescription] = useState(description);
+
+  const handleEditTitle = (value) => {
+    onChangeTitle(value);
+    onValueChange({ title: textTitle, description: textDescription });
+  };
+  const handleEditDescription = (value) => {
+    onChangeDescription(value);
+    onValueChange({ title: textTitle, description: textDescription });
+  };
 
   return (
     <View style={styles.card}>
@@ -14,7 +23,7 @@ function CadastroTreino({ title, description, onDeletePress }) {
         <TextInput
           style={[styles.title]}
           value={textTitle}
-          onChangeText={(text) => onChangeTitle(text)}
+          onChangeText={(text) => handleEditTitle(text)}
         />
 
         <TouchableOpacity onPress={onDeletePress}>
@@ -29,7 +38,7 @@ function CadastroTreino({ title, description, onDeletePress }) {
         style={[styles.description]}
         value={textDescription}
         multiline={true}
-        onChangeText={(text) => onChangeDescription(text)}
+        onChangeText={(text) => handleEditDescription(text)}
       />
     </View>
   );
