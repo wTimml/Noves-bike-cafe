@@ -35,7 +35,6 @@ import {  getUserEmail } from "../utils";
 import api from '../services/api'
 
 const LocationTaskName = "firstTask";
-
 const { width, height } = Dimensions.get("window");
 const MapHeight = height * 0.87;
 
