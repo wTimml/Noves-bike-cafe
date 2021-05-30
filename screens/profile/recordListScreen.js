@@ -72,7 +72,7 @@ const RecordListScreen = (props) => {
   return (
     <View style={{height:height}}>
 
-      <FlatList data={data_} renderItem={renderGridItem} numColumns={1}></FlatList>
+      <FlatList data={data_} renderItem={renderGridItem} numColumns={1} keyExtractor={(item, index) => item.id.toString()}></FlatList>
     </View>
   );
 };
