@@ -29,7 +29,7 @@ const userCard = ({ firstName, lastName, email, style }) => {
 
         <View style={styles.textContainer}>
           <Text style={styles.title}>
-            {firstName} {lastName}
+            {firstName} {lastName} 
           </Text>
           <Text style={styles.subTitle}>{email}</Text>
         </View>
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     height: 90,
     width: 90,
     borderRadius: 10,
-    marginLeft: 155,
+    marginLeft: 10,
     marginTop: 5,
   },
   title: {

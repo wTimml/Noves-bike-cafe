@@ -17,9 +17,7 @@ import Fonts from "../constants/fonts";
 
 import SignInScreenEmail from "./signInScreenEmail";
 import MainButton from "../components/buttonOneColumn";
-import logo from "../assets/logo.png";
-import textLOGO from "../assets/textLogo.png";
-
+import logoBikeCafe from "../logos/logoBikeCafe.png";
 
 Icon.loadFont();
 
@@ -53,16 +51,7 @@ export default function SignInScreen({ navigation, signIn }) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.inputView}>
-        <Image
-          source={
-            logo
-          }
-          style={{ width: 300, height: 300 }}
-        />
-        <Image
-          source={textLOGO}
-          style={{ width: 160, height: 60, marginTop: -35, marginBottom: 55 }}
-        />
+        <Image source={logoBikeCafe} style={{ width: 350, height: 300 }} />
       </View>
 
       <View>
