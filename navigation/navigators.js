@@ -197,7 +197,7 @@ const TabsScreen = () => (
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="account" color={color} size={size} />
         ),
-        tabBarBadge: 1,
+        tabBarBadge: null,
       }}
     />
     <Tabs.Screen
@@ -222,7 +222,7 @@ const TabsScreen = () => (
             size={size}
           />
         ),
-        tabBarBadge: 3,
+        tabBarBadge: null,
       }}
     />
   </Tabs.Navigator>
