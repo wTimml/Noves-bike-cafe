@@ -1,0 +1,134 @@
+import React, { useState } from 'react'
+import { View,StyleSheet, TextInput,Text, StatusBar, ActivityIndiator } from 'react-native'
+
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import PropTypes from 'prop-types'
+
+import ButtonMain from '../components/buttonMain'
+
+import Colors from '../constants/colors'
+import { Input } from 'react-native-elements'
+import { Button } from 'react-native'
+
+import api from '../services/api'
+
+const SignInScreenEmail =({navigation},props) =>{
+
+    const [state,setState] = useState({
+        email:'',
+        password:''
+    })
+    const [loading, setLoading] = useState(false);
+    const [errorMesage, setErrorMessage] = useState(null);
+
+    async function saveUser(user){
+        try{
+            await AsyncStorage.setItem('@ListApp:userToken', JSON.stringify(user))
+        }catch(e){
+            console.log(e)
+        }
+    }
+
+    async function signIn(){
+        if(state.email === 0) return
+        setLoading(true)
+
+        try{
+            const credentials = {
+                email:state.email,
+                password:state.password
+            }
+            const response = await api.post('', credentials)//ARRUMAR URL
+
+            const user = response.data
+
+            await saveUser(user)
+
+            
+            setLoading(false)
+
+            //navigate para a tela principal
+            navigation.navigate({ routeName:''});
+
+        }catch(err){
+            console.log(err)
+
+            setLoading(false)
+            setErrorMessage('Usuário não existe')
+        }
+
+    }
+
+    return(
+        <View >
+            <StatusBar barStyle='light-content'/>
+
+            {!!errorMesage && <Error>{errorMesage}</Error>}
+
+            <View style={styles.inputView}>
+                <Input style={styles.inputComponent}
+                    placeholder="email"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    underlineColorAndroid="rgba(0, 0, 0, 0)"
+                    value={state.email}
+                    onChangeText={setState({...state, email:state.email})}/>
+
+                <Input style={styles.inputComponent} 
+                    placeholder="senha"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    secureTextEntry={true}
+                    underlineColorAndroid="rgba(0, 0, 0, 0)"
+                    value={state.password}
+                    onChangeText={setState({...state, password:state.password})}
+                    />
+
+                <ButtonMain style={{margin:10}} onPress={signIn}>
+                
+                    {loading ?(
+                        <ActivityIndicator size="small" color="#FFF"/>
+                    ):(
+                        <Text>Entrar</Text>
+                    )
+                    }
+                </ButtonMain>
+                </View>
+            <View style={styles.inputView}>
+                <Text style={styles.textLink}>Esqueceu sua senha?</Text>
+                <View style={{flex:1,flexDirection:'row', marginBottom:20}}>
+                    <Text style={styles.textLink}>Não possui conta?</Text>
+                    <Text  onPress={() => navigation.push("CreateAccount")} style={{color:Colors.lightColor}} >Cadastrar</Text>
+                </View>    
+
+            </View>
+            <Text onPress={props.isByEmail} style={{paddingLeft:40,fontSize:18, color:Colors.lightColor}}> {'<<'} Voltar</Text>
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({  
+    inputView:{
+        flex:1,
+        flexDirection:"column",
+        justifyContent:"center",
+        alignItems:"center",
+        
+    },
+    inputComponent:{
+        height:50,
+        width:200,
+        borderRadius:25,
+        backgroundColor:Colors.lightColor,
+        marginBottom:12,
+        textAlign:'center'
+    },
+    textLink:{
+        color:'#CBB693',
+        marginRight:10,
+        marginLeft:10
+    }
+})
+
+
+export default SignInScreenEmail

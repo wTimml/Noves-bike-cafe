@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "expo_Noves",
+    "slug": "expo_Noves",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splashLOGO.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#293A2E"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android":{
+      "package":"com.noves.expo_Noves",
+      "versionCode":1,
+      "config":{
+        "googleMaps":{
+          "apiKey":"AIzaSyCeQqzoyxdcROM7M4qky6jauXIB_bW5z68"
+        }
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "description": ""
+  }
+}
